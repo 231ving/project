@@ -1,0 +1,84 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+h1 {
+  font-size: 30px;
+}
+
+div {
+  font-size: 14px;
+}
+
+div.spells {
+  text-align: center;
+
+}
+.spells h2 {
+  border-top: 2px dotted black;
+  padding-top: 20px;
+  margin: auto;
+  margin-bottom: 3px;
+}
+
+div.spellbook_description {
+  padding-bottom: 20px;
+}
+
+div.spellbook_description p {
+  font-style: italic;
+  margin: auto;
+}
+
+div.spelldetails {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  border-top: 2px solid black;
+  column-gap: 10px;
+  text-wrap: pretty;
+}
+
+div.spelldetails > * {
+  text-wrap: pretty;
+  margin: 7px;
+  width: 200px;
+}
+
+p.spellname {
+  font-weight: bold;
+}
