@@ -173,19 +173,13 @@ function SpellCollections(props) {
       <h1> {props.title} </h1>
       <div className='spells' > {currentSpellCollection.map((spellbook, index) => (
           <Spellbook key={index}
-              name={spellbook.name}
-              spells={spellbook.spells}
+              name={spellbook.name} spells={spellbook.spells}
               spellbook_descriptions={spellbook.spellbook_descriptions}
-              currentSpellbookIndex={index}
-              currentSpellbookContentIndex={0}
-              newDescriptions={newDescriptions}
-              newSpells={newSpells}
-              updateSpellbookName={updateSpellbookName}
-              updateDescriptions={updateDescriptions}
-              updateSpells={updateSpells}
-              deleteBook={deleteBook}
-              deleteDesc={deleteDesc}
-              deleteSpell={deleteSpell}
+              currentSpellbookIndex={index} currentSpellbookContentIndex={0}
+              newDescriptions={newDescriptions} newSpells={newSpells}
+              updateSpellbookName={updateSpellbookName} updateDescriptions={updateDescriptions}
+              updateSpells={updateSpells} deleteBook={deleteBook}
+              deleteDesc={deleteDesc} deleteSpell={deleteSpell}
           />
       ))}
       <button onClick={() => newBook('Placeholder')}>New Spellbook</button>
