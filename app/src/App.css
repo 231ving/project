@@ -58,9 +58,17 @@ div.spells {
 
 div.spellbook_description {
   padding-bottom: 20px;
+  text-align: center;
+  width: 500px;
+  margin: auto;
 }
 
-div.spellbook_description p {
+div p.spellbook_description {
+  text-align: left;
+  margin-top: 5px;
+}
+
+.spellbook_description p {
   font-style: italic;
   margin: auto;
 }
@@ -81,4 +89,18 @@ div.spelldetails > * {
 
 p.spellname {
   font-weight: bold;
+}
+
+p.spelldesc {
+  grid-column-end: span 4;
+  text-align: left;
+  width: auto;
+}
+
+button.desc_button {
+  float: right;
+}
+
+button.center_button {
+  margin-left: 50px;
 }
