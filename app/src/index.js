@@ -7,7 +7,7 @@ import reportWebVitals from './reportWebVitals';
 const data = [{
   name: "Common Spell Book",
   spells: [
-      { id: 0, name: "Mana Orb", description: 'Fire an orb of dense Mana,', spell_school: 'Destruction', action_type: "Main Action", effect_magnitude: 10, effect_area: 0, effect_range: 10, effect_count: 1, effect_duration: 0, spell_cost: 10, spell_resource: 'Mana', source_name: 'Public', source_link: 'None' },
+      { id: 0, name: "Mana Orb", description: 'Fire an orb of dense Mana.', spell_school: 'Destruction', action_type: "Main Action", effect_magnitude: 10, effect_area: 0, effect_range: 10, effect_count: 1, effect_duration: 0, spell_cost: 10, spell_resource: 'Mana', source_name: 'Public', source_link: 'None' },
       { id: 1, name: "Mana Arrow", description: 'Fire a sharp arrow of Mana,', spell_school: 'Destruction', action_type: "Main Action", effect_magnitude: 20, effect_area: 0, effect_range: 20, effect_count: 1, effect_duration: 0, spell_cost: 15, spell_resource: 'Mana', source_name: 'Public', source_link: 'None' },
       { id: 2, name: "Mage Hand", description: 'A magical construct in the shape of a hand.', spell_school: 'Conjuration', action_type: "Main Action", effect_magnitude: 5, effect_area: 0, effect_range: 20, effect_count: 1, effect_duration: 0, spell_cost: 20, spell_resource: 'Mana', source_name: 'Public', source_link: 'None' },
       { id: 3, name: "Mana Draw", description: 'The caster draws in ambient Mana to replenish their reserves.', spell_school: 'Restoration', action_type: "Main Action", effect_magnitude: 50, effect_area: 10, effect_range: 0, effect_count: 1, effect_duration: 0, spell_cost: 10, spell_resource: 'Mana', source_name: 'Public', source_link: 'None' },
