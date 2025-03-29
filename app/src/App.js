@@ -1,112 +1,109 @@
-import { useState } from 'react'
-import './App.css';
-import {Spellbook} from './Spellbook.js';
+import { useState, useEffect } from 'react'
+import './App.css'
+import SpellList from './SpellListView.js'
+import SpellAPI from './SpellAPI'
+import SpellModel from './SpellModel.js'
+import NewSpellForm from './NewSpellForm.jsx'
 
 // Currently CRUD is using static inputs
 // Having trouble dynamically adding input boxes and re-rendering upon change
 
+const defaultSpell = new SpellModel({})
+
 function SpellCollections(props) {
-  const [currentSpellCollection, setSpellCollection] = useState(props.spellbooks);
-  const [currentSpellbookIndex, setSpellbookIndex] = useState(0);
-  const [currentSpellbookContentIndex, setSpellbookContentIndex] = useState(0);
-  const [SpellbookName, setSpellbookName] = useState('')
-  
-  const handleChange = (e) => {
-    const {value} = e.target;
-    setSpellbookName((prevData) => (
-      value))
-    //console.log(name, value, e)
-  }
-  
-  const newBook = (newContent) => {
-    const temp = currentSpellCollection
-    temp.push({name: newContent, spells: [], spellbook_descriptions: []})
-    setSpellCollection(temp)
-    console.log(currentSpellCollection)
+  const [currentSpells, setSpells] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState(undefined);
+  const [editMode, setEditMode] = useState(false);
+  const [spellToEdit, setSpellToEdit] = useState(defaultSpell)
+  const [currentSpellIndex, setSpellIndex] = useState(0);
+
+  let fetchSpells = () => {
+    setLoading(true)
+
+    SpellAPI.fetchSpells()
+      .then(data => {
+        data.forEach((spell => setSpellIndex(spell.id)))
+      setMessage(undefined)
+      setSpells(data)
+      setLoading(false)
+    }).catch(problem => {
+      setLoading(false)
+      setMessage("Unable to load spells from the server.")
+      console.log("Problem when calling SpellAPI.fetchSpells()")
+    })
   }
 
-  const handleSubmit = (e) => {
-    console.log(SpellbookName)
-    e.preventDefault();
-    newBook(SpellbookName)
+  useEffect(fetchSpells, [])
+
+  const finishSubmit = (newSpells) => {
+    setSpells(newSpells)
+    setEditMode(false)
+    setSpellToEdit(defaultSpell)
   }
 
-  const newDescriptions = (spellbookIndex, newContent) => {
-    const temp = currentSpellCollection
-    temp[spellbookIndex].spellbook_descriptions.push(newContent)
-    setSpellCollection(temp)
-    console.log(currentSpellCollection[spellbookIndex].spellbook_descriptions)
+  const submit = (event) => {
+    console.log(event)
+    event.preventDefault()
+    let testSpell = new SpellModel(spellToEdit)
+    if (testSpell.isValid()) {
+      if (editMode) {
+        console.log('In edit mode.')
+        SpellAPI.modifySpell(spellToEdit).then(data => {
+          console.log("Received data from modify spell post")
+          console.log(data)
+          let newSpells = currentSpells.map( (item) => item.id === spellToEdit.id ? spellToEdit : item)
+          finishSubmit(newSpells)
+        })
+      } else {
+        console.log("In 'new spell' mode.")
+        spellToEdit.id = currentSpellIndex
+        SpellAPI.addSpell(spellToEdit).then( data => {
+          console.log("Received data from new spell post")
+          console.log(data)
+          spellToEdit.id = data.id
+
+          let newSpells = [spellToEdit, ...currentSpells]
+          finishSubmit(newSpells)
+        }).catch( data => {
+          console.log('Problem saving new spell')
+          console.log(data)
+          finishSubmit(currentSpells)
+        })
+      }
+    } else {
+      console.log('Spell is not valid')
+      let currSpell = new SpellModel(spellToEdit)
+      currSpell.isValid()
+      console.log(currSpell.errors)
+      setSpellToEdit(currSpell)
+    }
   }
 
-  const newSpells = (spellbookIndex, newContent) => {
-    const temp = currentSpellCollection
-    temp[spellbookIndex].spells.push(newContent)
-    setSpellCollection(temp)
-    console.log(currentSpellCollection[spellbookIndex].spells)
+  const updateFormData = (spell) => {
+    setSpellToEdit(spell)
   }
 
-  const updateSpellbookName = (spellbookIndex, newContent) => {
-    const temp = currentSpellCollection
-    temp[spellbookIndex].name = newContent
-    setSpellCollection(temp)
-    console.log(currentSpellCollection[spellbookIndex])
+  const editSpell = (spell) => {
+    setSpellToEdit(spell)
+    setEditMode(true)
   }
 
-  const updateDescriptions = (spellbookIndex, contentIndex, newContent) => {
-    const temp = currentSpellCollection
-    temp[spellbookIndex].spellbook_descriptions[contentIndex] = newContent
-    setSpellCollection(temp)
-    console.log(currentSpellCollection[spellbookIndex].spellbook_descriptions)
+  const cancelEdit = (spell) => {
+    setSpellToEdit(defaultSpell)
+    setEditMode(false)
   }
 
-  const updateSpells = (spellbookIndex, contentIndex, newContent) => {
-    const temp = currentSpellCollection
-    temp[spellbookIndex].spells[contentIndex] = newContent
-    setSpellCollection(temp)
-    console.log(currentSpellCollection[spellbookIndex].spells)
+  const deleteSpell = (spell) => {
+    SpellAPI.deleteSpell(spell)
+    let newSpells = currentSpells.filter(item => item.id !== spell.id)
+    finishSubmit(newSpells)
   }
 
-  const deleteBook = (spellbookIndex) => {
-    const temp = currentSpellCollection
-    delete temp[spellbookIndex]
-    setSpellCollection(temp)
-    console.log(currentSpellCollection)
-  }
-  const deleteDesc = (spellbookIndex, contentIndex) => {
-    const temp = currentSpellCollection
-    delete temp[spellbookIndex].spellbook_descriptions[contentIndex]
-    setSpellCollection(temp)
-    console.log(currentSpellCollection[spellbookIndex].spellbook_descriptions)
-  }
-
-  const deleteSpell = (spellbookIndex, contentIndex) => {
-    const temp = currentSpellCollection
-    delete temp[spellbookIndex].spells[contentIndex]
-    setSpellCollection(temp)
-    console.log(currentSpellCollection[spellbookIndex].spells)
-  }
-
-  return <section>
-      <h1> {props.title} </h1>
-      <div className='spells' > {currentSpellCollection.map((spellbook, index) => (
-          <Spellbook key={index}
-              name={spellbook.name} spells={spellbook.spells}
-              spellbook_descriptions={spellbook.spellbook_descriptions}
-              currentSpellbookIndex={index} currentSpellbookContentIndex={0}
-              newDescriptions={newDescriptions} newSpells={newSpells}
-              updateSpellbookName={updateSpellbookName} updateDescriptions={updateDescriptions}
-              updateSpells={updateSpells} deleteBook={deleteBook}
-              deleteDesc={deleteDesc} deleteSpell={deleteSpell}
-          />
-      ))}
-    <form onSubmit={handleSubmit}>
-    <div className='spellbook_description'>
-    <p className='spellbook_description left'>New Spellbook: <input type='text' name='description' value={SpellbookName} onChange={handleChange}></input></p>
-    <button type='submit' className='center_button'>Create New Spellbook</button>
+  return <div className='spells' >
+      <NewSpellForm editMode={editMode} spellToEdit={spellToEdit} onUpdate={updateFormData} onSubmit={submit} onCancelEdit={cancelEdit} />
+      <SpellList spells={currentSpells} loading={loading} message={message} onEditSpell={editSpell} onDeleteSpell={deleteSpell} />
     </div>
-    </form>
-    </div>
-  </section>;
 }
 
 export default SpellCollections;

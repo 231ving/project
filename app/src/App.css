@@ -78,7 +78,7 @@ div p.spellbook_description.left {
   margin: auto;
 }
 
-div.spelldetails {
+.spelldetails {
   display: grid;
   grid-template-columns: auto auto auto auto;
   border-top: 2px solid black;
@@ -127,4 +127,11 @@ button {
 
 button.submit_spell {
   margin-left: 50px;
+}
+
+input.description {
+  height: 150px;
+  grid-column-end: span 4;
+  margin: 20px;
+  margin-top: 2px;
 }
