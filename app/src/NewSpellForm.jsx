@@ -1,16 +1,34 @@
 // Name: Phuc Le
 // Currently having issues with input boxes deselecting after every change in input
+import { useLocation } from 'react-router-dom'
 
 export default function AddSpellForm({ editMode = false, spellToEdit, onUpdate = f => f, onSubmit = f => f, onCancelEdit = f => f, onSearch = f => f, onResetFilter = f => f}) {
     function error_log()  {
         if (spellToEdit.errors.length !== 0) {
             return <div>Error List:
-            <ul>
-            {spellToEdit.errors.map((item, key) => (
-                <li>{item}</li>
-            ))}
-            </ul>
+                <ul>
+                    {spellToEdit.errors.map((item, key) => (
+                    <li>{item}</li>
+                    ))}
+                </ul>
             </div>
+        }
+    }
+
+    let location = useLocation()
+    function return_main() {
+        if (location.path === `/spells/${spellToEdit.id}`) {
+            return <a className='button' href={`/spells`} type='submit' onClick='return error_log()'>{editMode ? 'Update' : 'Add'}</a>
+        } else {
+            return <button onClick={() => error_log()}>{editMode ? 'Update' : 'Add'}</button>
+        }
+    }
+  
+    function allow_cancel() {
+        if (location.pathname === `/spells`) {
+            return <button type='button' onClick={onCancelEdit}>Cancel</button>
+        } else {
+            return
         }
     }
     
@@ -123,10 +141,10 @@ export default function AddSpellForm({ editMode = false, spellToEdit, onUpdate =
                 required
             />
             {/* This button should submit the form */}
-            <button onClick={() => error_log()}>{editMode ? 'Update' : 'Add'}</button>
+            {return_main()}
             
             {/* <button> by default will submit a form.  If you don't want this behavior, set the type to 'button'*/}
-            <button type='button' onClick={onCancelEdit}>Cancel</button>
+            {allow_cancel()}
             <button type='button' onClick={() => onSearch(spellToEdit)}>Search Using Filters</button>
             <button type='button' onClick={onResetFilter}>Reset Filter</button>
 

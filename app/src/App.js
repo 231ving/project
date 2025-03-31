@@ -4,7 +4,8 @@ import SpellList from './SpellListView.js'
 import SpellAPI from './SpellAPI'
 import SpellModel from './SpellModel.js'
 import NewSpellForm from './NewSpellForm.jsx'
-import { Routes, Route } from 'react-router-dom'
+import SpellDetails from './SpellDetails.jsx'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import {
   NotFound,
   About,
@@ -59,9 +60,9 @@ function SpellCollections(props) {
   }
 
   const finishSubmit = (newSpells) => {
-    setSpells(newSpells)
-    setEditMode(false)
     setSpellToEdit(defaultSpell)
+    setEditMode(false)
+    setSpells(newSpells)
   }
 
   const submit = (event) => {
@@ -167,6 +168,12 @@ function SpellCollections(props) {
         <Route
           path="/spells"
           element={<Spells />}
+        />
+        <Route path="/spells/:id" element={
+          <>
+            <NewSpellForm editMode={editMode} spellToEdit={spellToEdit} onUpdate={updateFormData} onSubmit={submit} onCancelEdit={cancelEdit} onSearch={searchSpell} onResetFilter={resetFilters}/>
+            <SpellDetails spells={currentSpells} loading={loading} message={message} onViewSpell={viewSpell} onCopySpell={copySpell} onEditSpell={editSpell} onDeleteSpell={deleteSpell} spellsList={Spells}/>
+          </>}
         />
         <Route
           path="/about"

@@ -1,5 +1,7 @@
 // Name: Phuc Le
 
+import { useLocation } from 'react-router-dom'
+
 function get_dice(value) {
   var dice_types = [2, 3, 4, 6, 8, 10, 12, 20, 100]
   var best_dice = dice_types[0]
@@ -40,17 +42,26 @@ export default function Spell({ id, name, description, spell_school, action_type
       errors: errors
     }
     let public_status_str = 'True'
-    if (spell.public_status == 0) {
+    if (spell.public_status === 0) {
       public_status_str = 'False'
     }
     let modifiable_str = 'True'
-    if (spell.modifiable == 0) {
+    if (spell.modifiable === 0) {
       modifiable_str = 'False'
     }
     let dice = {
       magnitude_dice: get_dice(effect_magnitude),
       count_dice: get_dice(effect_count),
       duration_dice: get_dice(effect_duration)
+    }
+
+    let location = useLocation()
+    function view_back() {
+      if (location.pathname !== `/spells/${id}`) {
+        return <a href={`/spells/${spell.id}`} className='button'>View</a>
+      } else {
+        return <a href={`/spells`} className='button'>Back</a>
+      }
     }
     return (
       <section>
@@ -74,7 +85,7 @@ export default function Spell({ id, name, description, spell_school, action_type
               <p>Quick Copyable: {modifiable_str}</p>
               <p>{spell.errors}</p>
               <p className='spelldesc'>Spell Description: {spell.description}</p>
-              <button onClick={() => onViewClicked(spell)}>View</button>
+              {view_back()}
               <button onClick={() => onCopyClicked(spell)}>Quick Copy</button>
               <button onClick={() => onEditClicked(spell)}>Edit</button>
               <button onClick={() => onDeleteClicked(spell)}>Delete</button>
