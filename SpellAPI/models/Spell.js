@@ -1,7 +1,7 @@
 // Name: Phuc Le
 
-class Spell {
 
+class Spell {
     constructor(description) {
         if (description.id) {
             this.id = Number(description.id)
@@ -83,7 +83,6 @@ class Spell {
         } else {
             this.modifiable = 0
         }
-
         this.errors = []
     }
 

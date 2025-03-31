@@ -1,7 +1,6 @@
 // Name: Phuc Le
 
 class SpellModel {
-
     constructor(description) {
         if (description.id) {
             this.id = Number(description.id)
@@ -83,7 +82,6 @@ class SpellModel {
         } else {
             this.modifiable = 0
         }
-
         this.errors = []
     }
 

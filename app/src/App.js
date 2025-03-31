@@ -4,6 +4,14 @@ import SpellList from './SpellListView.js'
 import SpellAPI from './SpellAPI'
 import SpellModel from './SpellModel.js'
 import NewSpellForm from './NewSpellForm.jsx'
+import { Routes, Route } from 'react-router-dom'
+import {
+  NotFound,
+  About,
+  Contact,
+  Home,
+  NavBar
+} from './Navigation.js'
 
 // Currently CRUD is using static inputs
 // Having trouble dynamically adding input boxes and re-rendering upon change
@@ -34,7 +42,21 @@ function SpellCollections(props) {
     })
   }
 
-  useEffect(fetchSpells, [])
+  let fetchSearch = (spell) => {
+    setLoading(true)
+
+    SpellAPI.fetchsearchSpells(spell)
+      .then(data => {
+        data.forEach((spell => setSpellIndex(spell.id)))
+      setMessage(undefined)
+      setSpells(data)
+      setLoading(false)
+    }).catch(problem => {
+      setLoading(false)
+      setMessage("Unable to load spells from the server.")
+      console.log("Problem when calling SpellAPI.fetchSearch()")
+    })
+  }
 
   const finishSubmit = (newSpells) => {
     setSpells(newSpells)
@@ -84,6 +106,15 @@ function SpellCollections(props) {
     setSpellToEdit(spell)
   }
 
+  const viewSpell = (spell) => {
+    console.log('Placeholder for Single Page View')
+  }
+
+  const copySpell = (spell) => {
+    setSpellToEdit(spell)
+    setEditMode(false)
+  }
+
   const editSpell = (spell) => {
     setSpellToEdit(spell)
     setEditMode(true)
@@ -100,9 +131,53 @@ function SpellCollections(props) {
     finishSubmit(newSpells)
   }
 
+  const searchSpell = (spell) => {
+    setEditMode(false)
+    fetchSearch(spell)
+  }
+
+  const resetFilters = () => {
+    setSpellToEdit(defaultSpell)
+    setEditMode(false)
+    fetchSpells()
+  }
+
+  useEffect(fetchSpells, [])
+
+  function Spells() {
+    return <div>
+      <NewSpellForm editMode={editMode} spellToEdit={spellToEdit} onUpdate={updateFormData} onSubmit={submit} onCancelEdit={cancelEdit} onSearch={searchSpell} onResetFilter={resetFilters}/>
+      <SpellList spells={currentSpells} loading={loading} message={message} onViewSpell={viewSpell} onCopySpell={copySpell} onEditSpell={editSpell} onDeleteSpell={deleteSpell} />
+    </div>
+  }
+
   return <div className='spells' >
-      <NewSpellForm editMode={editMode} spellToEdit={spellToEdit} onUpdate={updateFormData} onSubmit={submit} onCancelEdit={cancelEdit} />
-      <SpellList spells={currentSpells} loading={loading} message={message} onEditSpell={editSpell} onDeleteSpell={deleteSpell} />
+    <NavBar />
+      <Routes>
+        <Route path="/" element={
+          <>
+            <NewSpellForm editMode={editMode} spellToEdit={spellToEdit} onUpdate={updateFormData} onSubmit={submit} onCancelEdit={cancelEdit} onSearch={searchSpell} onResetFilter={resetFilters}/>
+            <SpellList spells={currentSpells} loading={loading} message={message} onViewSpell={viewSpell} onCopySpell={copySpell} onEditSpell={editSpell} onDeleteSpell={deleteSpell} />
+          </>}
+        />
+        <Route
+          path="/home"
+          element={<Home />}
+        />
+        <Route
+          path="/spells"
+          element={<Spells />}
+        />
+        <Route
+          path="/about"
+          element={<About />}
+        />
+        <Route
+          path="/contact"
+          element={<Contact />}
+        />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </div>
 }
 

@@ -51,6 +51,21 @@ if (myArgs[0] === '--test') {
     })
 }
 
+app.get('/init', (req, res) => {
+    require('./db/SqliteSpellDB').initialize()
+    res.send('Initialized.')
+})
+
+app.get('/spells_search?', async (req, res) => {
+    // Introduce an artificial delay so user can see the effects of loading.    
+    let delay = 500;  // default is 500. Can be overridden by query string.
+    if (req.query.hasOwnProperty('delay')) {
+        delay = req.query.delay;
+        console.log("Using a delay of =>" + delay + "<=");
+    }
+    setTimeout(async () => res.json(await SpellDB.spellsearch(req.query)), delay)
+})
+
 app.get('/spells', async (req, res) => {
     // Introduce an artificial delay so user can see the effects of loading.    
     let delay = 500;  // default is 500. Can be overridden by query string.

@@ -135,3 +135,11 @@ input.description {
   margin: 20px;
   margin-top: 2px;
 }
+
+#root {
+  padding: 5px;
+}
+
+span {
+  display: block;
+}

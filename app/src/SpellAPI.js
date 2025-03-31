@@ -12,8 +12,11 @@ export default class SpellAPI {
     })
   }
 
-  static fetchNextID() {
-    return fetch(`${apiURL}/next_id?delay=1`).then(response => {
+  static fetchsearchSpells(spell) {
+    // You can configure a delay on the API if you 
+    // want to see what happens if the server is slow.
+    let parameters = new URLSearchParams(spell).toString()
+    return fetch(`${apiURL}/spells_search?${parameters}`).then(response => {
       return response.json()
     })
   }

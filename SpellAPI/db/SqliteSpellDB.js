@@ -40,7 +40,7 @@ class SqliteSpellDB {
             this.db.all('SELECT * from Spells', (err, response) => {
                 //console.log('Select all')
                 //console.log(err)
-                console.log(response)
+                //console.log(response)
                 resolve(response.map((item) => new Spell(item)))
             })
         })
@@ -91,7 +91,26 @@ class SqliteSpellDB {
             resolve(spell)
         })
     }
-}
+
+    static spellsearch(spell) {
+        return new Promise((resolve, reject) => {
+            this.db.all(`SELECT * from Spells where name LIKE "%${spell.name}%" AND description LIKE "%${spell.description}" AND spell_school LIKE "%${spell.spell_school}%" AND action_type LIKE "%${spell.action_type}%" AND effect_magnitude LIKE "%${spell.effect_magnitude}%" AND effect_area LIKE "%${spell.effect_area}%" AND effect_range LIKE "%${spell.effect_range}%" AND effect_count LIKE "%${spell.effect_count}%" AND effect_duration LIKE "%${spell.effect_duration}%" AND spell_cost LIKE "%${spell.spell_cost}%" AND spell_resource LIKE "%${spell.spell_resource}%" AND source_name LIKE "%${spell.source_name}%" AND source_link LIKE "%${spell.source_link}%" AND public_status LIKE "%${spell.public_status}%" AND modifiable LIKE "%${spell.modifiable}%";`, (err, rows) => {
+                if (err) {
+                    reject(`Problem finding spells: ${err}`)
+                } else {
+                    resolve(rows.map((row) => new Spell(row)))
+                }
+            })
+        }).catch(problem => {
+            console.log(problem)
+            console.log(spell)
+            console.log(`SELECT * from Spells where name="${spell.name}", description="${spell.description}", spell_school="${spell.spell_school}", action_type="${spell.action_type}", effect_magnitude="${spell.effect_magnitude}", effect_area="${spell.effect_area}", effect_range="${spell.effect_range}", effect_count="${spell.effect_count}", effect_duration="${spell.effect_duration}", spell_cost="${spell.spell_cost}", spell_resource="${spell.spell_resource}", source_name="${spell.source_name}", source_link="${spell.source_link}", public_status="${public_status}", modifiable="${modifiable}";`)
+            return this.allSpells()
+        }
+
+        )
+    }
+}  
 
 SqliteSpellDB.db = new sqlite3.Database(__dirname + 'spells.sqlite')
 module.exports = SqliteSpellDB

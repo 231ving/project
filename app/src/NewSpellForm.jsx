@@ -1,6 +1,7 @@
 // Name: Phuc Le
+// Currently having issues with input boxes deselecting after every change in input
 
-export default function AddSpellForm({ editMode = false, spellToEdit, onUpdate = f => f, onSubmit = f => f, onCancelEdit = f => f }) {
+export default function AddSpellForm({ editMode = false, spellToEdit, onUpdate = f => f, onSubmit = f => f, onCancelEdit = f => f, onSearch = f => f, onResetFilter = f => f}) {
     function error_log()  {
         if (spellToEdit.errors.length !== 0) {
             return <div>Error List:
@@ -110,7 +111,7 @@ export default function AddSpellForm({ editMode = false, spellToEdit, onUpdate =
                 <option value="0" onChange={event =>onUpdate({...spellToEdit, public_status: event.target.value})}>False</option>
             </select>
             <label for="modifiable">Quick Modifiable: </label>
-            <select id="modifiable"defaultValue={spellToEdit.modifiable} onChange={event =>onUpdate({...spellToEdit, public_status: event.target.value})}>
+            <select id="modifiable"defaultValue={spellToEdit.modifiable} onChange={event =>onUpdate({...spellToEdit, modifiable: event.target.value})}>
                 <option value="1" onChange={event =>onUpdate({...spellToEdit, modifiable: event.target.value})}>True</option>
                 <option value="0" onChange={event =>onUpdate({...spellToEdit, modifiable: event.target.value})}>False</option>
             </select>
@@ -126,6 +127,9 @@ export default function AddSpellForm({ editMode = false, spellToEdit, onUpdate =
             
             {/* <button> by default will submit a form.  If you don't want this behavior, set the type to 'button'*/}
             <button type='button' onClick={onCancelEdit}>Cancel</button>
+            <button type='button' onClick={() => onSearch(spellToEdit)}>Search Using Filters</button>
+            <button type='button' onClick={onResetFilter}>Reset Filter</button>
+
         </form>
         <div>Error List:
             <ul>
