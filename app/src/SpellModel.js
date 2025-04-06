@@ -10,27 +10,27 @@ class SpellModel {
         if (description.name) {
             this.name = description.name
         } else {
-            this.name = 'Placeholder'
+            this.name = ''
         }
         if (description.description) {
             this.description = description.description
         } else {
-            this.description = 'Placeholder'
+            this.description = ''
         }
         if (description.spell_school) {
             this.spell_school = description.spell_school
         } else {
-            this.spell_school = 'Placeholder'
+            this.spell_school = ''
         }
         if (description.action_type) {
             this.action_type = description.action_type
         } else {
-            this.action_type = 'Placeholder'
+            this.action_type = ''
         }
         if (description.effect_magnitude) {
             this.effect_magnitude = Number(description.effect_magnitude)
         } else {
-            this.effect_magnitude = 1
+            this.effect_magnitude = 0
         }
         if (description.effect_area) {
             this.effect_area = Number(description.effect_area)
@@ -45,7 +45,7 @@ class SpellModel {
         if (description.effect_count) {
             this.effect_count = Number(description.effect_count)
         } else {
-            this.effect_count = 1
+            this.effect_count = 0
         }
         if (description.effect_duration) {
             this.effect_duration = Number(description.effect_duration)
@@ -55,22 +55,22 @@ class SpellModel {
         if (description.spell_cost) {
             this.spell_cost = Number(description.spell_cost)
         } else {
-            this.spell_cost = 1
+            this.spell_cost = 0
         }
         if (description.spell_resource) {
             this.spell_resource = description.spell_resource
         } else {
-            this.spell_resource = 'Placeholder'
+            this.spell_resource = ''
         }
         if (description.source_name) {
             this.source_name = description.source_name
         } else {
-            this.source_name = 'Placeholder'
+            this.source_name = ''
         }
         if (description.source_link) {
             this.source_link = description.source_link
         } else {
-            this.source_link = 'Placeholder'
+            this.source_link = ''
         }
         if (description.public_status) {
             this.public_status = Number(description.public_status)
@@ -123,10 +123,10 @@ class SpellModel {
         if (!this.source_name || this.source_name.length <= 0) {
             this.errors.push('The spell must have an Source name.')
         }
-        if (this.public_status != 0 && this.public_status != 1) {
+        if (this.public_status !== 0 && this.public_status !== 1) {
             this.errors.push('The spell public status must be a 0 (for false) or 1 (for true).')
         }
-        if (this.modifiable != 0 && this.modifiable != 1) {
+        if (this.modifiable !== 0 && this.modifiable !== 1) {
             this.errors.push('The modifiable status must be a 0 (for false) or 1 (for true).')
         }
         return this.errors.length <= 0

@@ -12,9 +12,11 @@ code {
     monospace;
 }
 
-#updateForm {
-  border: 1px solid black;
+.updateForm {
+  border: 2px solid black;
   padding: 7px;
+  width: auto;
+  margin: auto;
 }
 
 #navBar a {
@@ -22,5 +24,7 @@ code {
 }
 
 #navBar {
-  padding-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid black;
+  margin-bottom: 25px;
 }

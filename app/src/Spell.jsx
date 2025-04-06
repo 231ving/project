@@ -1,6 +1,7 @@
 // Name: Phuc Le
 
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
+
 
 function get_dice(value) {
   var dice_types = [2, 3, 4, 6, 8, 10, 12, 20, 100]
@@ -21,7 +22,7 @@ function get_dice(value) {
   return [dice_count, best_dice, leftover]
 }
 
-export default function Spell({ id, name, description, spell_school, action_type, effect_magnitude, effect_area, effect_range, effect_count, effect_duration, spell_cost, spell_resource, source_name, source_link, public_status, modifiable, errors, onViewClicked = f => f, onEditClicked = f => f, onCopyClicked = f => f, onDeleteClicked = f => f}) {
+export default function Spell({ id, name, description, spell_school, action_type, effect_magnitude, effect_area, effect_range, effect_count, effect_duration, spell_cost, spell_resource, source_name, source_link, public_status, modifiable, errors, currhistory, onSetHistoryClicked = f => f, onEditClicked = f => f, onCopyClicked = f => f, onDeleteClicked = f => f}) {
     let spell = {
       id: id,
       name: name,
@@ -54,41 +55,60 @@ export default function Spell({ id, name, description, spell_school, action_type
       count_dice: get_dice(effect_count),
       duration_dice: get_dice(effect_duration)
     }
+    const navigate = useNavigate()
+
+    function onView(spell) {
+      onSetHistoryClicked(spell)
+      navigate(`/spells/${spell.id}`)
+    }
 
     let location = useLocation()
     function view_back() {
       if (location.pathname !== `/spells/${id}`) {
-        return <a href={`/spells/${spell.id}`} className='button'>View</a>
+        return <button className='col-s-3 col-6'onClick={() => onView(spell)}>View</button>
       } else {
-        return <a href={`/spells`} className='button'>Back</a>
+        return <button className='col-s-3 col-6'onClick={() => navigate(`/spells`)}>Back</button>
       }
     }
+
+    function error_log()  {
+      if (errors.length !== 0) {
+          return <div>Error List:
+              <ul>
+                  {errors.map((item, key) => (
+                  <li>{item}</li>
+                  ))}
+              </ul>
+          </div>
+      }
+  }
+
     return (
-      <section>
+      <section className='single_spell'>
         <h1>{spell.name}</h1>
-        <div>
-            <div className='spelldetails'> 
-              <p className='spellname'>Spell Name: {spell.name}</p>
-              <p>Spell ID: {spell.id}</p>
-              <p>Spell School: {spell.spell_school}</p>
-              <p>Action Cost: {spell.action_type}</p>
-              <p>Effect Magnitude: {spell.effect_magnitude} <span>Dice: {dice.magnitude_dice[0]}d{dice.magnitude_dice[1]}+{dice.magnitude_dice[2]}</span></p>
-              <p>Effect Area: {spell.effect_area}</p>
-              <p>Effect Range: {spell.effect_range}</p>
-              <p>Effect Count: {spell.effect_count}<span>Dice: {dice.count_dice[0]}d{dice.count_dice[1]}+{dice.count_dice[2]}</span></p>
-              <p>Effect Duration: {spell.effect_duration}<span>Dice: {dice.duration_dice[0]}d{dice.duration_dice[1]}+{dice.duration_dice[2]}</span></p>
-              <p>Casting Cost: {spell.spell_cost}</p>
-              <p>Casting Resource: {spell.spell_resource}</p>
-              <p>Source: {spell.source_name}</p>
-              <p>Source Link: {spell.source_link}</p>
-              <p>Publicly Viewable: {public_status_str}</p>
-              <p>Quick Copyable: {modifiable_str}</p>
-              <p>{spell.errors}</p>
-              <p className='spelldesc'>Spell Description: {spell.description}</p>
+        <div className='container'>
+            <div className='row spell'>
+              <p className='col-lg-2 col-sm-3 col-s-4 col-3'>Spell Name: {spell.name}</p>
+              <div className='col-lg-2 col-sm-3 col-s-4 col-3'>Spell ID: {spell.id}</div>
+              <div className='col-lg-2 col-sm-3 col-s-4 col-3'>Spell School: {spell.spell_school}</div>
+              <p className='col-lg-2 col-sm-3 col-s-4 col-3'>Action Cost: {spell.action_type}</p>
+              <p className='col-lg-2 col-sm-3 col-s-4 col-3'>Effect Magnitude: {spell.effect_magnitude} <span>Dice: {dice.magnitude_dice[0]}d{dice.magnitude_dice[1]}+{dice.magnitude_dice[2]}</span></p>
+              <p className='col-lg-2 col-sm-3 col-s-4 col-3'>Effect Area: {spell.effect_area}</p>
+              <p className='col-lg-2 col-sm-3 col-s-4 col-3'>Effect Range: {spell.effect_range}</p>
+              <p className='col-lg-2 col-sm-3 col-s-4 col-3'>Effect Count: {spell.effect_count}<span>Dice: {dice.count_dice[0]}d{dice.count_dice[1]}+{dice.count_dice[2]}</span></p>
+              <p className='col-lg-2 col-sm-3 col-s-4 col-3'>Effect Duration: {spell.effect_duration}<span>Dice: {dice.duration_dice[0]}d{dice.duration_dice[1]}+{dice.duration_dice[2]}</span></p>
+              <p className='col-lg-2 col-sm-3 col-s-4 col-3'>Casting Cost: {spell.spell_cost}</p>
+              <p className='col-lg-2 col-sm-3 col-s-4 col-3'>Casting Resource: {spell.spell_resource}</p>
+              <p className='col-lg-2 col-sm-3 col-s-4 col-3'>Source: {spell.source_name}</p>
+              <p className='col-lg-2 col-sm-3 col-s-4 col-3'>Source Link: {spell.source_link}</p>
+              <p className='col-lg-2 col-sm-3 col-s-4 col-3'>Publicly Viewable: {public_status_str}</p>
+              <p className='col-lg-2 col-sm-3 col-s-4 col-3'>Quick Copyable: {modifiable_str}</p>
+              {error_log()}
+              <p className='col-12 spell_desc'>Spell Description: {spell.description}</p>
               {view_back()}
-              <button onClick={() => onCopyClicked(spell)}>Quick Copy</button>
-              <button onClick={() => onEditClicked(spell)}>Edit</button>
-              <button onClick={() => onDeleteClicked(spell)}>Delete</button>
+              <button className='col-s-3 col-6' onClick={() => onCopyClicked(spell)}>Quick Copy</button>
+              <button className='col-s-3 col-6'onClick={() => onEditClicked(spell)}>Edit</button>
+              <button className='col-s-3 col-6' onClick={() => onDeleteClicked(spell)}>Delete</button>
             </div>
         </div>
       </section>

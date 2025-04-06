@@ -37,8 +37,21 @@
   }
 }
 
+html {
+  background-color: beige;
+}
+
+body {
+  background-color: beige;
+}
+
+input {
+  background-color: beige;
+  border-width: 1px;
+}
+
 h1 {
-  font-size: 30px;
+  font-size: 24px;
 }
 
 div {
@@ -78,18 +91,8 @@ div p.spellbook_description.left {
   margin: auto;
 }
 
-.spelldetails {
-  display: grid;
-  grid-template-columns: auto auto auto auto;
-  border-top: 2px solid black;
-  column-gap: 10px;
-  text-wrap: pretty;
-}
-
 div.spelldetails > * {
   text-wrap: pretty;
-  margin: 7px;
-  width: 200px;
 }
 
 p.spellname {
@@ -97,9 +100,7 @@ p.spellname {
 }
 
 p.spelldesc {
-  grid-column-end: span 4;
   text-align: center;
-  width: auto;
 }
 
 button.desc_button {
@@ -111,29 +112,19 @@ button.center_button {
   margin-left: 50px;
 }
 
-input.description {
-  width: auto;
-}
-
-input.spelldescription {
-  grid-column-end: span 4;
-  text-align: center;
-  width: auto;
-}
-
 button {
   margin-bottom: 5px;
 }
 
-button.submit_spell {
-  margin-left: 50px;
+input.description {
+  padding: 5px;
+  height: 100px;
+  margin-top: 2px;
 }
 
-input.description {
-  height: 150px;
-  grid-column-end: span 4;
-  margin: 20px;
-  margin-top: 2px;
+label {
+  justify-content: left;
+  padding: 0px;
 }
 
 #root {
@@ -144,15 +135,55 @@ span {
   display: block;
 }
 
+div.view_back{
+  padding: 0px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  margin-bottom: 5px;
+}
+
 a.button {
   padding: 1px 6px;
-  border: 1px outset buttonborder;
-  border-radius: 3px;
+  border: 2px outset buttonborder;
   color: buttontext;
   background-color: buttonface;
   text-decoration: none;
+  display: block;
+  width: auto;
 }
 
 a.button:hover {
   filter: brightness(95%);
+}
+
+.history {
+  border: 2px outset buttonborder;
+  width: 20%;
+}
+
+.random_spell {
+  margin-top: 50px;
+  border: 2px outset buttonborder;
+  width: 20%;
+}
+
+.single_spell {
+  border: 2px outset buttonborder;
+  border-bottom: 0px;
+}
+
+.single_spell:last-child {
+  border: 2px outset buttonborder;
+}
+
+.row.spell {
+  border-top: 2px outset buttonborder;
+}
+
+.spell_desc {
+  border-top: 2px outset buttonborder;
+}
+
+ul {
+  text-align: left;
 }

@@ -2,14 +2,18 @@
 
 var sqlite3 = require('sqlite3').verbose()
 let Spell = require('../models/Spell')
+let Collection = require('../models/CollectionModel')
+let User = require('../models/User')
 
-
-class SqliteSpellDB {
+class SqliteDB {
     static reset() {
         console.log('Resetting DB')
-        SqliteSpellDB.db = new sqlite3.Database(__dirname + 'spells.sqlite')
+        SqliteDB.db = new sqlite3.Database(__dirname + 'spells.sqlite')
         this.db.run("DROP TABLE Spells");
-        SqliteSpellDB.initialize();
+        this.db.run("DROP TABLE Collections");
+        this.db.run("DROP TABLE Connection");
+        this.db.run("DROP TABLE Users");
+        SqliteDB.initialize();
     }
 
     static initialize() {
@@ -32,6 +36,25 @@ class SqliteSpellDB {
             this.db.run('INSERT INTO Spells (name, description, spell_school, action_type, effect_magnitude, effect_area, effect_range, effect_count, effect_duration, spell_cost, spell_resource, source_name, source_link, public_status, modifiable) VALUES ("Resurrect", "Returns life to the dead, if only for a time.", "Restoration Magic", "Main Action", 1000, 0, 5, 1, 100, 10000, "Mana", "Original Content", "None", 1, 1)')
             this.db.run('INSERT INTO Spells (name, description, spell_school, action_type, effect_magnitude, effect_area, effect_range, effect_count, effect_duration, spell_cost, spell_resource, source_name, source_link, public_status, modifiable) VALUES ("Great Shift", "The pinnacle of teleportation magic, capable of transporting armies across entire nations", "Spatial Magic", "Main Action", 100000, 10000, 1000000, 1, 0, 8000, "Mana", "Original Content", "None", 1, 1)')
             this.db.run('INSERT INTO Spells (name, description, spell_school, action_type, effect_magnitude, effect_area, effect_range, effect_count, effect_duration, spell_cost, spell_resource, source_name, source_link, public_status, modifiable) VALUES ("Word of Death", "A blasphemous spell stolen from the God of Death itself.", "Necromantic Magic", "reaction", 500, 0, 10, 1, 0, 50, "Mana", "Original Content", "None", 1, 1)')
+        
+            this.db.run('CREATE TABLE Collections (id INTEGER PRIMARY KEY, name TEXT NOT NULL, description TEXT NOT NULL, source_name TEXT NOT NULL, source_link TEXT, public_status INTEGER NOT NULL, modifiable INTEGER NOT NULL);')
+            this.db.run('INSERT INTO Collections (name, description, source_name, source_link, public_status, modifiable) VALUES ("Ice Magic", "Magic manipulating ice.", "Original Content", "None", 1, 1);')
+            this.db.run('INSERT INTO Collections (name, description, source_name, source_link, public_status, modifiable) VALUES ("Elemental Magic", "Magic manipulating the base elements.", "Original Content", "None", 1, 1);')
+            this.db.run('INSERT INTO Collections (name, description, source_name, source_link, public_status, modifiable) VALUES ("Holy Magic", "Divine magic that calls upon the gods.", "Original Content", "None", 1, 1);')
+            this.db.run('INSERT INTO Collections (name, description, source_name, source_link, public_status, modifiable) VALUES ("Necromancy", "Necromantic magic that calls upon death.", "Original Content", "None", 1, 1);')
+            this.db.run('INSERT INTO Collections (name, description, source_name, source_link, public_status, modifiable) VALUES ("Arcane Magic", "The magic of the Arcane. The foundation of all Apprentice spells.", "Original Content", "None", 1, 1);')
+        
+            this.db.run('CREATE TABLE Connection (spell_id INTEGER NOT NULL, collection_id INTEGER NOT NULL, PRIMARY KEY (spell_id, collection_id), FOREIGN KEY(spell_id) REFERENCES Spells(id) ON DELETE CASCADE, FOREIGN KEY(collection_id) REFERENCES Collection(id) ON DELETE CASCADE );')
+            this.db.run('INSERT INTO Connection (spell_id, collection_id) VALUES (0, 1);')
+            this.db.run('INSERT INTO Connection (spell_id, collection_id) VALUES (1, 1);')
+            this.db.run('INSERT INTO Connection (spell_id, collection_id) VALUES (2, 1);')
+            this.db.run('INSERT INTO Connection (spell_id, collection_id) VALUES (3, 2);')
+            this.db.run('INSERT INTO Connection (spell_id, collection_id) VALUES (4, 2);')
+            this.db.run('INSERT INTO Connection (spell_id, collection_id) VALUES (5, 2);')
+
+            this.db.run('CREATE TABLE Users (id INTEGER PRIMARY KEY, email TEXT NOT NULL, username TEXT NOT NULL, password TEXT NOT NULL, admin INTEGER NOT NULL );')
+            this.db.run('INSERT INTO Users (email, username, password, admin) VALUES ("test231@gmail.com", "231vingADMIN", "Admin231password!", 1);')
+            this.db.run('INSERT INTO Users (email, username, password, admin) VALUES ("test123@gmail.com", "231vingUSER", "User231password!", 1);')
         })
     }
 
@@ -46,19 +69,29 @@ class SqliteSpellDB {
         })
     }
 
-    static find(id) {
-        return new Promise((resolve, reject) => {
-            this.db.all(`SELECT * from Spells where id="${Number(id)}";`, (err, rows) => {
-                if (rows.length >= 1) {
-                    resolve(new Spell(rows[0]))
-                } else {
-                    reject(`Id ${id} not found`)
-                }
+    static allCollections() {
+        return new Promise((resolve, _reject) => {
+            this.db.all('SELECT * from Collections', (err, response) => {
+                //console.log('Select all')
+                //console.log(err)
+                //console.log(response)
+                resolve(response.map((item) => new Collection(item)))
             })
         })
     }
 
-    static create(description) {
+    static allUsers() {
+        return new Promise((resolve, _reject) => {
+            this.db.all('SELECT * from Users', (err, response) => {
+                //console.log('Select all')
+                //console.log(err)
+                //console.log(response)
+                resolve(response.map((item) => new User(item)))
+            })
+        })
+    }
+
+    static createSpell(description) {
         let newSpell = new Spell(description)
         if (newSpell.isValid()) {
             return new Promise((resolve, _reject) => {
@@ -75,7 +108,41 @@ class SqliteSpellDB {
         }
     }
 
-    static update(spell) {
+    static createCollection(description) {
+        let newCollection = new Collection(description)
+        if (newCollection.isValid()) {
+            return new Promise((resolve, _reject) => {
+                this.db.run(`INSERT INTO Collections (name, description, source_name, source_link, public_status, modifiable) VALUES ("${newCollection.name}", "${newCollection.description}", "${newCollection.source_name}", "${newCollection.source_link}", "${newCollection.public_status}", "${newCollection.modifiable}")`,
+                    function(_err, _data) {
+                        newCollection.id = this.lastID
+                        resolve(newCollection)
+                    })
+                })
+        } else {
+            return new Promise((resolve, _reject) => {
+                resolve(newSpell)
+            })
+        }
+    }
+
+    static createUser(description) {
+        let newUser = new User(description)
+        if (newUser.isValid()) {
+            return new Promise((resolve, _reject) => {
+                this.db.run(`INSERT INTO Users (email, username, password, admin) VALUES ("${newUser.email}", "${newUser.username}", "${newUser.password}", "${newUser.admin}")`,
+                    function(_err, _data) {
+                        newUser.id = this.lastID
+                        resolve(newUser)
+                    })
+                })
+        } else {
+            return new Promise((resolve, _reject) => {
+                resolve(newUser)
+            })
+        }
+    }
+
+    static updateSpell(spell) {
         let updatedSpell = new Spell(spell)
         if (updatedSpell.isValid()) {
             return new Promise((resolve, _reject) => {
@@ -85,10 +152,46 @@ class SqliteSpellDB {
         }
     }
 
-    static delete(spell) {
+    static updateCollection(collection) {
+        let updatedCollection = new Collection(collection)
+        if (updatedCollection.isValid()) {
+            return new Promise((resolve, _reject) => {
+                this.db.run(`UPDATE Collections SET name="${collection.name}", description="${collection.description}", source_name="${collection.source_name}", source_link="${collection.source_link}", public_status="${collection.public_status}", modifiable="${collection.modifiable}" where id="${collection.id}"`)
+                resolve(collection)
+            })
+        }
+    }
+
+    static updateUser(user) {
+        let updatedUser = new User(user)
+        if (updatedUser.isValid()) {
+            return new Promise((resolve, _reject) => {
+                this.db.run(`UPDATE Users SET email="${user.email}", username="${user.username}", password="${user.password}", admin="${user.admin}" where id="${user.id}"`)
+                resolve(user)
+            })
+        }
+    }
+
+    static deleteSpell(spell) {
+        //this.db.get('PRAGMA foreign_keys = ON');
         return new Promise((resolve, _reject) => {
             this.db.run(`DELETE FROM Spells where id="${spell.id}"`)
             resolve(spell)
+        })
+    }
+
+    static deleteCollection(collection) {
+        //this.db.get('PRAGMA foreign_keys = ON');
+        return new Promise((resolve, _reject) => {
+            this.db.run(`DELETE FROM Collections where id="${collection.id}"`)
+            resolve(collection)
+        })
+    }
+
+    static deleteUser(user) {
+        return new Promise((resolve, _reject) => {
+            this.db.run(`DELETE FROM Users where email="${user.email} AND id="${user.id}"`)
+            resolve(user)
         })
     }
 
@@ -104,13 +207,42 @@ class SqliteSpellDB {
         }).catch(problem => {
             console.log(problem)
             console.log(spell)
-            console.log(`SELECT * from Spells where name="${spell.name}", description="${spell.description}", spell_school="${spell.spell_school}", action_type="${spell.action_type}", effect_magnitude="${spell.effect_magnitude}", effect_area="${spell.effect_area}", effect_range="${spell.effect_range}", effect_count="${spell.effect_count}", effect_duration="${spell.effect_duration}", spell_cost="${spell.spell_cost}", spell_resource="${spell.spell_resource}", source_name="${spell.source_name}", source_link="${spell.source_link}", public_status="${public_status}", modifiable="${modifiable}";`)
             return this.allSpells()
-        }
+        })
+    }
 
-        )
+    static collectionsearch(collection) {
+        return new Promise((resolve, reject) => {
+            this.db.all(`SELECT * from Collections where name LIKE "%${collection.name}%" AND description LIKE "%${collection.description}" AND source_name LIKE "%${collection.source_name}%" AND source_link LIKE "%${collection.source_link}%" AND public_status LIKE "%${collection.public_status}%" AND modifiable LIKE "%${collection.modifiable}%";`, (err, rows) => {
+                if (err) {
+                    reject(`Problem finding collections: ${err}`)
+                } else {
+                    resolve(rows.map((row) => new Collection(row)))
+                }
+            })
+        }).catch(problem => {
+            console.log(problem)
+            console.log(collection)
+            return this.allCollections()
+        })
+    }
+
+    static usersearch(user) {
+        return new Promise((resolve, reject) => {
+            this.db.all(`SELECT * from Users where id LIKE "%${user.id}" AND username LIKE "%${user.username}";`, (err, rows) => {
+                if (err) {
+                    reject(`Problem finding users: ${err}`)
+                } else {
+                    resolve(rows.map((row) => new User(row)))
+                }
+            })
+        }).catch(problem => {
+            console.log(problem)
+            console.log(user)
+            return this.allUsers()
+        })
     }
 }  
 
-SqliteSpellDB.db = new sqlite3.Database(__dirname + 'spells.sqlite')
-module.exports = SqliteSpellDB
+SqliteDB.db = new sqlite3.Database(__dirname + 'spells.sqlite')
+module.exports = SqliteDB

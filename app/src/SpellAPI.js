@@ -84,7 +84,7 @@ export default class SpellAPI {
       },
       body: JSON.stringify(spell)
     }
-    console.log('Attempting to post modification to spell')
+    console.log('Attempting to delete spell')
     console.log(spell)
 
     return fetch(`${apiURL}/spells/${spell.id}`, options).then(async response => {

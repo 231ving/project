@@ -1,14 +1,41 @@
 // Name: Phuc Le
 
 import React from 'react'
-import { useLocation, Link } from 'react-router-dom'
+import { useLocation, Link, useNavigate } from 'react-router-dom'
 
-export function Home() {
-  return (
-    <div>
-      <h1>[Spell Database]</h1>
+export function Home( {currhistory, spells, onSetHistoryClicked = f => f} ) {
+  const navigate = useNavigate()
+  let random_int = Math.round(Math.random() * spells.length)
+  function show_history() {
+    if (currhistory.length !== 0) {
+      return <div className='col-12'>Spell History:
+            <ul className='col-12'>
+              {currhistory.map(item => <li onClick={() => navigate(`/spells/${item[0]}`)}>{item[1]}</li>)}
+            </ul>
+          </div>
+    } else {
+      return <div className='col-12'>No Recently Shown Spells</div>
+    }
+  }
+
+  function onView(spell) {
+    onSetHistoryClicked(spell)
+    navigate(`/spells/${spell.id}`)
+  }
+
+  return <div>
+    <h1>[Spell Database]</h1>
+    <div className='container history'>
+      <div className='row'>
+        {show_history()}
+      </div>
     </div>
-  )
+    <div className='container random_spell'>
+      <div className='row'>
+        <div className='col-12'>Random Spell: <div onClick={() => onView(spells[random_int])}>Click Here To View a Random Spell!<span>({spells[random_int].name})</span></div></div>
+      </div>
+    </div>
+  </div>
 }
 
 export function About() {
@@ -44,8 +71,11 @@ export function NavBar() {
             Contents: 
       <Link to="home">Home</Link>
       <Link to="spells">Spells</Link>
+      <Link to="collections">Collections</Link>
       <Link to="about">About</Link>
       <Link to="contact">Contact Us</Link>
+      <Link to="users">Users</Link>
+      <Link to="login">Login/Sign Up</Link>
     </nav>
   )
 }

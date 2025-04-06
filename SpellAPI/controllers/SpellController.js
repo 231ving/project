@@ -1,18 +1,18 @@
 // Name: Phuc Le
 
 const Spell = require('../models/Spell')
-const SpellDB = require('../db/SqliteSpellDB')
+const DB = require('../db/SqliteDB')
 
 class SpellController {
     index(req, res) {
-        SpellDB.allSpells().then((arrayOfSpells) => {
+        DB.allSpells().then((arrayOfSpells) => {
             res.render('spellIndex', { spells: arrayOfSpells, history: req.cookies['visit_history']['spell_history'], names: req.cookies['visit_history']['spell_names'] })
         })
     }
 
     show(req, res) {
         let id = req.params.id
-        SpellDB.find(id).catch( (_error) => {
+        DB.find(id).catch( (_error) => {
             res.send('Could not find spell with id of ' + id)
         }).then( (spell) => {
             if (spell != undefined) {
@@ -41,7 +41,7 @@ class SpellController {
                 res.render('spellNew', { spell: testSpell })
                 return;
             }
-        SpellDB.create(req.body.spell).then( (newSpell) => {
+        DB.create(req.body.spell).then( (newSpell) => {
             if (newSpell.isValid()) {
                 // Send a redirect to the "show" route for the new spell.
                 res.writeHead(302, { 'Location': `/spells/${newSpell.id}` })
@@ -54,7 +54,7 @@ class SpellController {
 
     edit(req, res) {
         let id = req.params.id
-        SpellDB.find(id).then((spell) => {
+        DB.find(id).then((spell) => {
             if (!spell) {
                 res.send('Could not find spell with id of ' + id)
             } else {
@@ -65,9 +65,9 @@ class SpellController {
 
     delete(req, res) {
         let id = req.params.id
-        SpellDB.find(id).then( (spell) => {
+        DB.find(id).then( (spell) => {
             if (spell) {
-                SpellDB.delete(spell)
+                DB.delete(spell)
                 res.writeHead(302, { 'Location': `/spells` })
                 res.end()
             }
@@ -79,7 +79,7 @@ class SpellController {
 
     update(req, res) {
         let id = req.params.id
-        SpellDB.find(id).then( (spell) => {
+        DB.find(id).then( (spell) => {
             let testSpell = new Spell(req.body.spell)
             if (!testSpell.isValid()) {
                 testSpell.id = spell.id
@@ -107,7 +107,7 @@ class SpellController {
                 spell.public_status = req.body.spell.public_status
                 spell.modifiable = req.body.spell.modifiable
                 console.log('About to call update')
-                SpellDB.update(spell)
+                DB.update(spell)
 
                 // Send a redirect to the "show" route for the new spell.
                 res.writeHead(302, { 'Location': `/spells/${spell.id}` })
@@ -117,7 +117,7 @@ class SpellController {
     }
 
     rawIndex(req, res) {
-        SpellDB.allSpells().then((spells) => res.send(spells))
+        DB.allSpells().then((spells) => res.send(spells))
         res.send(spells)
     }
 }
