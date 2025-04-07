@@ -196,8 +196,9 @@ class SqliteDB {
     }
 
     static spellsearch(spell) {
+        const string = `SELECT * from Spells where `
         return new Promise((resolve, reject) => {
-            this.db.all(`SELECT * from Spells where name LIKE "%${spell.name}%" AND description LIKE "%${spell.description}" AND spell_school LIKE "%${spell.spell_school}%" AND action_type LIKE "%${spell.action_type}%" AND effect_magnitude LIKE "%${spell.effect_magnitude}%" AND effect_area LIKE "%${spell.effect_area}%" AND effect_range LIKE "%${spell.effect_range}%" AND effect_count LIKE "%${spell.effect_count}%" AND effect_duration LIKE "%${spell.effect_duration}%" AND spell_cost LIKE "%${spell.spell_cost}%" AND spell_resource LIKE "%${spell.spell_resource}%" AND source_name LIKE "%${spell.source_name}%" AND source_link LIKE "%${spell.source_link}%" AND public_status LIKE "%${spell.public_status}%" AND modifiable LIKE "%${spell.modifiable}%";`, (err, rows) => {
+            this.db.all(`SELECT * from Spells where name LIKE "%${spell.name}%" AND description LIKE "%${spell.description}%" AND spell_school LIKE "%${spell.spell_school}%" AND action_type LIKE "%${spell.action_type}%" AND spell_resource LIKE "%${spell.spell_resource}%" AND source_name LIKE "%${spell.source_name}%" AND source_link LIKE "%${spell.source_link}%";`, (err, rows) => {
                 if (err) {
                     reject(`Problem finding spells: ${err}`)
                 } else {
@@ -213,7 +214,7 @@ class SqliteDB {
 
     static collectionsearch(collection) {
         return new Promise((resolve, reject) => {
-            this.db.all(`SELECT * from Collections where name LIKE "%${collection.name}%" AND description LIKE "%${collection.description}" AND source_name LIKE "%${collection.source_name}%" AND source_link LIKE "%${collection.source_link}%" AND public_status LIKE "%${collection.public_status}%" AND modifiable LIKE "%${collection.modifiable}%";`, (err, rows) => {
+            this.db.all(`SELECT * from Collections where name LIKE "%${collection.name}%" OR description LIKE "%${collection.description}" OR source_name LIKE "%${collection.source_name}%" OR source_link LIKE "%${collection.source_link}%";`, (err, rows) => {
                 if (err) {
                     reject(`Problem finding collections: ${err}`)
                 } else {

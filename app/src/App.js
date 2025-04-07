@@ -5,6 +5,7 @@ import SpellList from './SpellListView.js'
 import SpellAPI from './SpellAPI.js'
 import SpellModel from './SpellModel.js'
 import NewSpellForm from './NewSpellForm.jsx'
+import SearchSpellForm from './searchSpellForm.jsx'
 import SpellDetails from './SpellDetails.jsx'
 
 import CollectionList from './CollectionListView.js'
@@ -331,6 +332,10 @@ function SpellCollections(props) {
     setEditMode(true)
   }
 
+  const cancelCopySpell = (spell) => {
+    setSpellToEdit(spell)
+  }
+
   const cancelEditSpell = (spell) => {
     setSpellToEdit(defaultSpell)
     setEditMode(false)
@@ -353,8 +358,6 @@ function SpellCollections(props) {
   const login = (user) => {
     UserAPI.fetchsearchUsers(user)
   }
-
-  //console.log(currentUsers)
 
   const deleteSpell = (spell) => {
     SpellAPI.deleteSpell(spell)
@@ -420,25 +423,34 @@ function SpellCollections(props) {
       <Routes>
         <Route path="/" element={
           <>
-            <Home currhistory={currHistory} spells={currentSpells} onSetHistoryClicked={setNewHistory} />
+            <Home currhistory={currHistory} spells={currentSpells} loading={loading} message={message} onSetHistoryClicked={setNewHistory} />
           </>}
         />
         <Route path="/home" element={
           <>
-            <Home currhistory={currHistory} spells={currentSpells} onSetHistoryClicked={setNewHistory} />
+            <Home currhistory={currHistory} spells={currentSpells} loading={loading} message={message} onSetHistoryClicked={setNewHistory} />
           </>}
         />
         <Route path="/spells" element={
           <>
-            <NewSpellForm editMode={editMode} spellToEdit={spellToEdit} onUpdate={updateFormDataSpell} onSubmit={submitSpell} onCancelEdit={cancelEditSpell} onSearch={searchSpell} onResetFilter={resetFilters}/>
+            <SearchSpellForm editMode={editMode} spellToEdit={spellToEdit} onUpdate={updateFormDataSpell} onSubmit={submitSpell} onCancelEdit={cancelEditSpell} onSearch={searchSpell} onResetFilter={resetFilters}/>
             <SpellList spells={currentSpells} loading={loading} message={message} onSetHistory={setNewHistory} onCopySpell={copySpell} onEditSpell={editSpell} onDeleteSpell={deleteSpell} />
           </>}
         />
         <Route path="/spells/:id" element={
           <>
-            <NewSpellForm editMode={editMode} spellToEdit={spellToEdit} onUpdate={updateFormDataSpell} onSubmit={submitSpell} onCancelEdit={cancelEditSpell} onSearch={searchSpell} onResetFilter={resetFilters}/>
             <SpellDetails spells={currentSpells} loading={loading} message={message} onSetHistory={setNewHistory} onCopySpell={copySpell} onEditSpell={editSpell} onDeleteSpell={deleteSpell} /> 
-          </>} 
+          </>}
+        />
+        <Route path="/spells/:id/edit" element={
+          <>
+            <NewSpellForm editMode={editMode} spellToEdit={spellToEdit} onUpdate={updateFormDataSpell} onSubmit={submitSpell} onCancelEdit={cancelEditSpell} onCancelCopy={cancelCopySpell} onSearch={searchSpell} onResetFilter={resetFilters}/>
+          </>}
+        />
+        <Route path="/spells/new" element={
+          <>
+            <NewSpellForm editMode={editMode} spellToEdit={spellToEdit} onUpdate={updateFormDataSpell} onSubmit={submitSpell} onCancelEdit={cancelEditSpell} onCancelCopy={cancelCopySpell} onSearch={searchSpell} onResetFilter={resetFilters}/>
+          </>}
         />
         <Route path="/collections" element={
           <>
@@ -450,6 +462,11 @@ function SpellCollections(props) {
           <>
             <NewCollectionForm editMode={editMode} collectionToEdit={collectionToEdit} onUpdate={updateFormDataCollection} onSubmit={submitCollection} onCancelEdit={cancelEditCollection} onSearch={searchCollection} onResetFilter={resetFilters}/>
             <CollectionDetails collections={currentCollections} loading={loading} message={message} onViewCollection={viewCollection} onCopyCollection={copyCollection} onEditCollection={editCollection} onDeleteCollection={deleteCollection} />
+          </>}
+        />
+        <Route path="/collections/:id/edit" element={
+          <>
+            <NewCollectionForm editMode={editMode} collectionToEdit={collectionToEdit} onUpdate={updateFormDataCollection} onSubmit={submitCollection} onCancelEdit={cancelEditCollection} onSearch={searchCollection} onResetFilter={resetFilters}/>
           </>}
         />
         <Route path="/users" element={

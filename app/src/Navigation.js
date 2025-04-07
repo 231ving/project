@@ -3,9 +3,16 @@
 import React from 'react'
 import { useLocation, Link, useNavigate } from 'react-router-dom'
 
-export function Home( {currhistory, spells, onSetHistoryClicked = f => f} ) {
+export function Home( {currhistory, spells, loading, message, onSetHistoryClicked = f => f} ) {
   const navigate = useNavigate()
   let random_int = Math.round(Math.random() * spells.length)
+  if (message) {
+    return <div>{message}</div>
+  } else if (loading) {
+    return <div>Loading ......</div>;
+  } else if(!spells.length) {
+    return <div>No Spells Listed.</div>;
+  } 
   function show_history() {
     if (currhistory.length !== 0) {
       return <div className='col-12'>Spell History:

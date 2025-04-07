@@ -24,23 +24,13 @@ function get_dice(value) {
 
 export default function Spell({ id, name, description, spell_school, action_type, effect_magnitude, effect_area, effect_range, effect_count, effect_duration, spell_cost, spell_resource, source_name, source_link, public_status, modifiable, errors, currhistory, onSetHistoryClicked = f => f, onEditClicked = f => f, onCopyClicked = f => f, onDeleteClicked = f => f}) {
     let spell = {
-      id: id,
-      name: name,
-      description: description,
-      spell_school: spell_school,
-      action_type: action_type,
-      effect_magnitude: effect_magnitude,
-      effect_area: effect_area,
-      effect_range: effect_range,
-      effect_count: effect_count,
-      effect_duration: effect_duration,
-      spell_cost: spell_cost,
-      spell_resource: spell_resource,
-      source_name: source_name,
-      source_link: source_link,
-      public_status: public_status,
-      modifiable: modifiable,
-      errors: errors
+      id: id, name: name, description: description, spell_school: spell_school,
+      action_type: action_type, effect_magnitude: effect_magnitude,
+      effect_area: effect_area, effect_range: effect_range,
+      effect_count: effect_count, effect_duration: effect_duration,
+      spell_cost: spell_cost, spell_resource: spell_resource,
+      source_name: source_name, source_link: source_link,
+      public_status: public_status, modifiable: modifiable, errors: errors
     }
     let public_status_str = 'True'
     if (spell.public_status === 0) {
@@ -51,10 +41,10 @@ export default function Spell({ id, name, description, spell_school, action_type
       modifiable_str = 'False'
     }
     let dice = {
-      magnitude_dice: get_dice(effect_magnitude),
-      count_dice: get_dice(effect_count),
+      magnitude_dice: get_dice(effect_magnitude), count_dice: get_dice(effect_count),
       duration_dice: get_dice(effect_duration)
     }
+
     const navigate = useNavigate()
 
     function onView(spell) {
@@ -62,12 +52,32 @@ export default function Spell({ id, name, description, spell_school, action_type
       navigate(`/spells/${spell.id}`)
     }
 
+    function onCopy(spell) {
+      onCopyClicked(spell)
+      navigate(`/spells/${spell.id}/edit`)
+    }
+
+    function onEdit(spell) {
+      onEditClicked(spell)
+      navigate(`/spells/${spell.id}/edit`)
+    }
+
     let location = useLocation()
     function view_back() {
       if (location.pathname !== `/spells/${id}`) {
-        return <button className='col-s-3 col-6'onClick={() => onView(spell)}>View</button>
+        return <section>
+            <button className='col-s-3 col-6'onClick={() => onView(spell)}>View</button>
+            <button className='col-s-3 col-6'onClick={() => onEdit(spell)}>Edit</button>
+            <button className='col-s-3 col-6' onClick={() => onCopy(spell)}>Quick Copy</button>
+            <button className='col-s-3 col-6' onClick={() => onDeleteClicked(spell)}>Delete</button>
+          </section>
       } else {
-        return <button className='col-s-3 col-6'onClick={() => navigate(`/spells`)}>Back</button>
+        return  <section>
+            <button className='col-s-3 col-6'onClick={() => onEdit(spell)}>Edit</button>
+            <button className='col-s-3 col-6' onClick={() => onCopy(spell)}>Quick Copy</button>
+            <button className='col-s-3 col-6' onClick={() => onDeleteClicked(spell)}>Delete</button>
+            <button className='col-s-3 col-6'onClick={() => navigate(`/spells`)}>Back</button>
+          </section>
       }
     }
 
@@ -106,9 +116,6 @@ export default function Spell({ id, name, description, spell_school, action_type
               {error_log()}
               <p className='col-12 spell_desc'>Spell Description: {spell.description}</p>
               {view_back()}
-              <button className='col-s-3 col-6' onClick={() => onCopyClicked(spell)}>Quick Copy</button>
-              <button className='col-s-3 col-6'onClick={() => onEditClicked(spell)}>Edit</button>
-              <button className='col-s-3 col-6' onClick={() => onDeleteClicked(spell)}>Delete</button>
             </div>
         </div>
       </section>

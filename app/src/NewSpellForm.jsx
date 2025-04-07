@@ -2,7 +2,7 @@
 // Currently having issues with input boxes deselecting after every change in input
 import { useLocation, useNavigate } from 'react-router-dom'
 
-export default function AddSpellForm({ editMode, spellToEdit, onUpdate = f => f, onSubmit = f => f, onCancelEdit = f => f, onSearch = f => f, onResetFilter = f => f}) {
+export default function AddSpellForm({ editMode, spellToEdit, onUpdate = f => f, onSubmit = f => f, onCancelEdit = f => f, onCancelCopy = f => f}) {
     const navigate = useNavigate()
     function error_log()  {
         if (spellToEdit.errors.length !== 0) {
@@ -17,19 +17,28 @@ export default function AddSpellForm({ editMode, spellToEdit, onUpdate = f => f,
     }
 
     let location = useLocation()
-    function return_main() {
-        if (location.path === `/spells/${spellToEdit.id}`) {
-            return <button className='col-sm-3 col-s-6 col-6' onClick={() => error_log()} type='submit'>{editMode ? 'Update' : 'Add'}</button>
-        } else {
-            return <button className='col-sm-3 col-s-6 col-6' onClick={() => error_log()}>{editMode ? 'Update' : 'Add'}</button>
+
+    function CancelEdit(spell) {
+        onCancelEdit(spell)
+    }
+
+    function CancelCopy(spell) {
+        onCancelCopy(spell)
+    }
+
+    function allow_cancels() {
+        if (editMode) {
+            return <button className='col-sm-3 col-s-6 col-6' type='button' onClick={() => CancelEdit(spellToEdit)}>Cancel Edit</button>
+        } else if (spellToEdit.id !== 0 ) {
+            return <button className='col-sm-3 col-s-6 col-6' type='button' onClick={() => CancelCopy(spellToEdit)}>Cancel Quick Copy</button>
         }
     }
-  
-    function allow_cancel() {
-        if (location.pathname === `/spells`) {
-            return <button className='col-sm-3 col-s-6 col-6' type='button' onClick={onCancelEdit}>Cancel</button>
+
+    function back() {
+        if (spellToEdit.id === 0) {
+            return <button className='col-sm-3 col-s-6 col-6' type='button' onClick={() => navigate(`/spells`)}>Back</button>
         } else {
-            return
+            return <button className='col-sm-3 col-s-6 col-6' type='button' onClick={() => navigate(`/spells/${spellToEdit.id}`)}>Back</button>
         }
     }
 
@@ -216,15 +225,10 @@ export default function AddSpellForm({ editMode, spellToEdit, onUpdate = f => f,
                 onChange={event =>onUpdate({...spellToEdit, description: event.target.value})}
                 type="text"
                 required
-            />
-            {/* This button should submit the form */}
-            {return_main()}
-            
-            {/* <button> by default will submit a form.  If you don't want this behavior, set the type to 'button'*/}
-            {allow_cancel()}
-            <button className='col-sm-3 col-s-6 col-6' type='button' onClick={() => onSearch(spellToEdit)}>Search Using Filters</button>
-            <button className='col-sm-3 col-s-6 col-6' type='button' onClick={onResetFilter}>Reset Filter</button>
-
+            />       
+            <button className='col-sm-3 col-s-6 col-6' onClick={() => error_log()} type='submit'>{editMode ? 'Update' : 'Add'}</button>
+            {allow_cancels()}
+            {back()}
         </form>
         {error_log()}
         </div>
