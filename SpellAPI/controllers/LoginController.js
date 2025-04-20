@@ -12,25 +12,22 @@ class LoginController {
         // For simplicity the password is always just the reverse of the 
         // login name.  In a real application, we would make a DB 
         // access to check the username and password.
-        let found_user = SqliteDB.usersearch(req.body)
-        console.log(found_user)
-        if (req.body.password !== found_user.password) {
-            // If the password is incorrect, re-render the login form.
-            res.redirect(returnTo ?? '/users')
+        if (req.body.user.user !== req.session.user) {
+            console.log('User from request not the user in session')
+            //res.redirect(returnTo ?? '/login')
         } else {
             console.log('Creating new session')
             req.session.regenerate((err) => {
                 if (err) next(err)
-                req.session.user = req.body.username
+                req.session.user = req.body.user.username
                 console.log('Session created')
                 console.log(req.session)
-                res.redirect(returnTo ?? '/spells')
             })
         }
     }
     
     logout(req, res) {
-        req.session.destroy(function(){
+        req.session.destroy(function() {
             res.redirect('/login')
         })
     }

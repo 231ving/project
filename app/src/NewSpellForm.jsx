@@ -2,8 +2,13 @@
 // Currently having issues with input boxes deselecting after every change in input
 import { useLocation, useNavigate } from 'react-router-dom'
 
-export default function AddSpellForm({ editMode, spellToEdit, onUpdate = f => f, onSubmit = f => f, onCancelEdit = f => f, onCancelCopy = f => f}) {
+export default function AddSpellForm({ editMode, currUser, spellToEdit, onUpdate = f => f, onSubmit = f => f, onCancelEdit = f => f, onCancelCopy = f => f}) {
     const navigate = useNavigate()
+    let location = useLocation()
+    if (!editMode && spellToEdit.source_name !== currUser.username) {
+        onUpdate({...spellToEdit, source_name: currUser.username})
+    }
+
     function error_log()  {
         if (spellToEdit.errors.length !== 0) {
             return <div>Error List:
@@ -16,21 +21,11 @@ export default function AddSpellForm({ editMode, spellToEdit, onUpdate = f => f,
         }
     }
 
-    let location = useLocation()
-
-    function CancelEdit(spell) {
-        onCancelEdit(spell)
-    }
-
-    function CancelCopy(spell) {
-        onCancelCopy(spell)
-    }
-
     function allow_cancels() {
         if (editMode) {
-            return <button className='col-sm-3 col-s-6 col-6' type='button' onClick={() => CancelEdit(spellToEdit)}>Cancel Edit</button>
+            return <button className='col-sm-3 col-s-6 col-6' type='button' onClick={() => onCancelEdit(spellToEdit)}>Cancel Edit</button>
         } else if (spellToEdit.id !== 0 ) {
-            return <button className='col-sm-3 col-s-6 col-6' type='button' onClick={() => CancelCopy(spellToEdit)}>Cancel Quick Copy</button>
+            return <button className='col-sm-3 col-s-6 col-6' type='button' onClick={() => onCancelCopy(spellToEdit)}>Cancel Quick Copy</button>
         }
     }
 
@@ -45,22 +40,22 @@ export default function AddSpellForm({ editMode, spellToEdit, onUpdate = f => f,
     function selected_public_status() {
         if (spellToEdit.public_status === Number(1)) {
             return <section className='row'>
-                <div className='col-3'>Viewable: </div>
-                <div className='col-2'>True
-                    <input checked type="radio" id="public_status_true" name="public_status" value="1" onChange={event =>onUpdate({...spellToEdit, public_status: event.target.value})}></input>
+                <div className='col-lg-6 col-sm-6 col-s-6 col-12'>Viewable: </div>
+                <div className='col-lg-3 col-sm-3 col-s-3 col-6'>True
+                    <input checked type="radio" id="public_status_true" name="public_status" value={1} onChange={event =>onUpdate({...spellToEdit, public_status: event.target.value})}></input>
                 </div>
-                <div className='col-1'>False
-                    <input type="radio" id="public_status_false" name="public_status" value="0" onChange={event =>onUpdate({...spellToEdit, public_status: event.target.value})}></input>
+                <div className='col-lg-3 col-sm-3 col-s-3 col-6'>False
+                    <input type="radio" id="public_status_false" name="public_status" value={0} onChange={event =>onUpdate({...spellToEdit, public_status: event.target.value})}></input>
                 </div>
             </section>
         } else {
             return <section className='row'>
-                <div className='col-3'>Viewable: </div>
-                <div className='col-2'>True
-                    <input type="radio" id="public_status_true" name="public_status" value="1" onChange={event =>onUpdate({...spellToEdit, public_status: event.target.value})}></input>
+                <div className='col-lg-6 col-sm-6 col-s-6 col-12'>Viewable: </div>
+                <div className='col-lg-3 col-sm-3 col-s-3 col-6'>True
+                    <input type="radio" id="public_status_true" name="public_status" value={1} onChange={event =>onUpdate({...spellToEdit, public_status: event.target.value})}></input>
                 </div>
-                <div className='col-1'>False
-                    <input checked type="radio" id="public_status_false" name="public_status" value="0" onChange={event =>onUpdate({...spellToEdit, public_status: event.target.value})}></input>
+                <div className='col-lg-3 col-sm-3 col-s-3 col-6'>False
+                    <input checked type="radio" id="public_status_false" name="public_status" value={0} onChange={event =>onUpdate({...spellToEdit, public_status: event.target.value})}></input>
                 </div>
             </section>
         }
@@ -69,22 +64,22 @@ export default function AddSpellForm({ editMode, spellToEdit, onUpdate = f => f,
     function selected_modifiable() {
         if (spellToEdit.modifiable === Number(1)) {
             return <section className='row'>
-                <div className='col-3'>Quick Copy: </div>
-                <label className='col-2' for="modifiable_true">True 
-                    <input  checked type="radio" id="modifiable_true" name="modifiable" value="1" onChange={event =>onUpdate({...spellToEdit, modifiable: event.target.value})}></input>
+                <div className='col-lg-6 col-sm-6 col-s-6 col-12'>Quick Copy: </div>
+                <label className='col-lg-3 col-sm-3 col-s-3 col-6' for="modifiable_true">True 
+                    <input  checked type="radio" id="modifiable_true" name="modifiable" value={1} onChange={event =>onUpdate({...spellToEdit, modifiable: event.target.value})}></input>
                 </label>
-                 <label className='col-1' for="modifiable_false">False 
-                    <input type="radio" id="modifiable_false" name="modifiable" value="0" onChange={event =>onUpdate({...spellToEdit, modifiable: event.target.value})}></input>
+                 <label className='col-lg-3 col-sm-3 col-s-3 col-6' for="modifiable_false">False 
+                    <input type="radio" id="modifiable_false" name="modifiable" value={0} onChange={event =>onUpdate({...spellToEdit, modifiable: event.target.value})}></input>
                 </label>
             </section>
         } else {
             return <section className='row'>
-                <div className='col-3'>Quick Copy: </div>
-                <label className='col-2' for="modifiable_true">True
-                    <input type="radio" id="modifiable_true" name="modifiable" value="1" onChange={event =>onUpdate({...spellToEdit, modifiable: event.target.value})}></input>
+                <div className='col-lg-6 col-sm-6 col-s-6 col-12'>Quick Copy: </div>
+                <label className='col-lg-3 col-sm-3 col-s-3 col-6' for="modifiable_true">True
+                    <input type="radio" id="modifiable_true" name="modifiable" value={1} onChange={event =>onUpdate({...spellToEdit, modifiable: event.target.value})}></input>
                 </label>
-                <label className='col-1' for="modifiable_false">False
-                    <input checked type="radio" id="modifiable_false" name="modifiable" value="0" onChange={event =>onUpdate({...spellToEdit, modifiable: event.target.value})}></input>
+                <label className='col-lg-3 col-sm-3 col-s-3 col-6' for="modifiable_false">False
+                    <input checked type="radio" id="modifiable_false" name="modifiable" value={0} onChange={event =>onUpdate({...spellToEdit, modifiable: event.target.value})}></input>
                 </label>
             </section>
         }
@@ -92,8 +87,8 @@ export default function AddSpellForm({ editMode, spellToEdit, onUpdate = f => f,
     
     // See the "Creating Custom Hooks" section in Porcello and Banks
     // for a short-cut to the cut-and-paste for value and onChange.
-    return (
-        <div className='container updateForm'>
+    return (<section className='single_spell'> 
+        <div className='container'>
             { editMode ? 'Update' : "New" } Spell
         <form onSubmit={onSubmit} className="row spelldetails">
             <div className='col-sm-3 col-s-6 col-6'>Name: </div>
@@ -202,11 +197,13 @@ export default function AddSpellForm({ editMode, spellToEdit, onUpdate = f => f,
                 required
             />
             <div className='col-sm-3 col-s-6 col-6'>Source Name: </div>
+            <div className='col-sm-3 col-s-6 col-6'>{spellToEdit.source_name}</div>
             <input
                 value={spellToEdit.source_name}
                 onChange={event =>onUpdate({...spellToEdit, source_name: event.target.value})}
-                type="text"
+                type="hidden"
                 className='col-sm-3 col-s-6 col-6'
+                display='hidden'
                 required
             />
             <div className='col-sm-3 col-s-6 col-6'>Source Link: </div>
@@ -232,5 +229,6 @@ export default function AddSpellForm({ editMode, spellToEdit, onUpdate = f => f,
         </form>
         {error_log()}
         </div>
+        </section>
     )
 }

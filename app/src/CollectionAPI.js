@@ -13,23 +13,42 @@ export default class CollectionAPI {
     })
   }
 
+  static fetchSpellsInCollection(collection) {
+    // You can configure a delay on the API if you 
+    // want to see what happens if the server is slow.
+    let parameters = new URLSearchParams(collection).toString()
+    return fetch(`${apiURL}/collections/:id/spells?${parameters}`).then(async response => {
+      return response.json()
+    })
+  }
+
+  static fetchSpellsNotInCollection(collection) {
+    // You can configure a delay on the API if you 
+    // want to see what happens if the server is slow.
+    let parameters = new URLSearchParams(collection).toString()
+    return fetch(`${apiURL}/collections/:id/not_spells?${parameters}`).then(async response => {
+      return response.json()
+    })
+  }
+
   static fetchsearchCollections(collection) {
     // You can configure a delay on the API if you 
     // want to see what happens if the server is slow.
     let parameters = new URLSearchParams(collection).toString()
+    console.log(parameters)
     return fetch(`${apiURL}/collections_search?${parameters}`).then(response => {
       return response.json()
     })
   }
 
-  static addCollection(collection) {
+  static addCollection(collection, user) {
     const options = {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json;charset=UTF-8'
       },
-      body: JSON.stringify(collection)
+      body: JSON.stringify({item: collection, user: user})
     }
     console.log('Attempting to post new collection')
     //console.log(collection)
@@ -45,7 +64,7 @@ export default class CollectionAPI {
     })
   }
 
-  static modifyCollection(collection) {
+  static modifyCollection(collection, user) {
     if (!collection.id) {
       throw new Error('collection must have an id to update')
     }
@@ -56,7 +75,7 @@ export default class CollectionAPI {
         Accept: 'application/json',
         'Content-Type': 'application/json;charset=UTF-8'
       },
-      body: JSON.stringify(collection)
+      body: JSON.stringify({item: collection, user: user})
     }
     console.log('Attempting to post modification to collection')
     console.log(collection)
@@ -72,7 +91,7 @@ export default class CollectionAPI {
     })
   }
 
-  static deleteCollection(collection) {
+  static deleteCollection(collection, user) {
     if (!collection.id) {
       throw new Error('collection must have an id to update')
     }
@@ -83,7 +102,7 @@ export default class CollectionAPI {
         Accept: 'application/json',
         'Content-Type': 'application/json;charset=UTF-8'
       },
-      body: JSON.stringify(collection)
+      body: JSON.stringify({item: collection, user: user})
     }
     console.log('Attempting to post modification to collection')
     console.log(collection)

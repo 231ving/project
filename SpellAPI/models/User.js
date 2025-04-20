@@ -27,7 +27,6 @@ class User {
         } else {
             this.admin = 0
         }
-        
         this.errors = []
     }
 

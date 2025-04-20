@@ -18,8 +18,8 @@ export default function SearchSpellForm({ editMode, spellToEdit, onUpdate = f =>
     
     // See the "Creating Custom Hooks" section in Porcello and Banks
     // for a short-cut to the cut-and-paste for value and onChange.
-    return (
-        <div className='container updateForm'>
+    return (<section className='single_spell'>
+        <div className='container'>
             Search Spells
         <form onSubmit={onSubmit} className="row spelldetails">
             <div className='col-sm-3 col-s-6 col-6'>Name: </div>
@@ -104,12 +104,13 @@ export default function SearchSpellForm({ editMode, spellToEdit, onUpdate = f =>
             />
             
             {/* <button> by default will submit a form.  If you don't want this behavior, set the type to 'button'*/}
-            <button className='col-sm-3 col-s-6 col-6' onClick={() => navigate(`/spells/new`)} type='submit'>Add Spell</button>
+            <button className='col-sm-3 col-s-6 col-6' onClick={() => navigate(`/spells/new`)} type='button'>Add Spell</button>
             <button className='col-sm-3 col-s-6 col-6' type='button' onClick={() => onSearch(spellToEdit)}>Search Using Filters</button>
             <button className='col-sm-3 col-s-6 col-6' type='button' onClick={() => onCancelEdit(spellToEdit)}>Clear Filter Boxes</button>
             <button className='col-sm-3 col-s-6 col-6' type='button' onClick={() => onResetFilter()}>Reset List</button>
         </form>
         {error_log()}
         </div>
+        </section>
     )
 }

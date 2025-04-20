@@ -12,6 +12,24 @@ export default class SpellAPI {
     })
   }
 
+  static fetchCollectionsWithSpell(spell) {
+    // You can configure a delay on the API if you 
+    // want to see what happens if the server is slow.
+    let parameters = new URLSearchParams(spell).toString()
+    return fetch(`${apiURL}/spells/:id/collections?${parameters}`).then(async response => {
+      return response.json()
+    })
+  }
+
+  static fetchCollectionsWithOutSpell(spell) {
+    // You can configure a delay on the API if you 
+    // want to see what happens if the server is slow.
+    let parameters = new URLSearchParams(spell).toString()
+    return fetch(`${apiURL}/spells/:id/not_collections?${parameters}`).then(async response => {
+      return response.json()
+    })
+  }
+
   static fetchsearchSpells(spell) {
     // You can configure a delay on the API if you 
     // want to see what happens if the server is slow.
@@ -21,14 +39,14 @@ export default class SpellAPI {
     })
   }
 
-  static addSpell(spell) {
+  static addSpell(spell, user) {
     const options = {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json;charset=UTF-8'
       },
-      body: JSON.stringify(spell)
+      body: JSON.stringify({item: spell, user: user})
     }
     console.log('Attempting to post new spell')
     //console.log(spell)
@@ -44,7 +62,7 @@ export default class SpellAPI {
     })
   }
 
-  static modifySpell(spell) {
+  static modifySpell(spell, user) {
     if (!spell.id) {
       throw new Error('spell must have an id to update')
     }
@@ -55,7 +73,7 @@ export default class SpellAPI {
         Accept: 'application/json',
         'Content-Type': 'application/json;charset=UTF-8'
       },
-      body: JSON.stringify(spell)
+      body: JSON.stringify({item: spell, user: user})
     }
     console.log('Attempting to post modification to spell')
     console.log(spell)
@@ -71,7 +89,7 @@ export default class SpellAPI {
     })
   }
 
-  static deleteSpell(spell) {
+  static deleteSpell(spell, user) {
     if (!spell.id) {
       throw new Error('spell must have an id to update')
     }
@@ -82,7 +100,7 @@ export default class SpellAPI {
         Accept: 'application/json',
         'Content-Type': 'application/json;charset=UTF-8'
       },
-      body: JSON.stringify(spell)
+      body: JSON.stringify({item: spell, user: user})
     }
     console.log('Attempting to delete spell')
     console.log(spell)

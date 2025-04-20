@@ -57,7 +57,7 @@ app.use(session({
 function isAuthenticated(req, res, next) {
 
     console.log('Enter isAuthenticated')
-    console.log(req.session)
+    console.log(req.body.user)
 
     // If there is an active session, and that session has a user property,
     // continue to the requested route.
@@ -67,8 +67,9 @@ function isAuthenticated(req, res, next) {
     } else {
         console.log('Save current destination in session so we can continue on later: ' + req.originalUrl)
         req.session.returnTo = req.originalUrl
-        console.log('redirecting to login page')
-        loginController.requestLogin(req, res, next)
+        console.log('redirecting to original page')
+        loginController.requestLogin(req, res)
+        next()
     }
 }
 
@@ -121,6 +122,28 @@ app.get('/spells_search?', async (req, res) => {
     setTimeout(async () => res.json(await DB.spellsearch(req.query)), delay)
 })
 
+app.get('/spells/:id/collections', async (req, res) => {
+    // Introduce an artificial delay so user can see the effects of loading.    
+    let delay = 500;  // default is 500. Can be overridden by query string.
+    if (req.query.hasOwnProperty('delay')) {
+        delay = req.query.delay;
+        console.log("Using a delay of =>" + delay + "<=");
+    }
+    console.log('Getting collections with that spell')
+    setTimeout(async () => res.json(await DB.collection_with_spell(req.query)), delay)
+})
+
+app.get('/spells/:id/not_collections', async (req, res) => {
+    // Introduce an artificial delay so user can see the effects of loading.    
+    let delay = 500;  // default is 500. Can be overridden by query string.
+    if (req.query.hasOwnProperty('delay')) {
+        delay = req.query.delay;
+        console.log("Using a delay of =>" + delay + "<=");
+    }
+    console.log('Getting collections without that spell')
+    setTimeout(async () => res.json(await DB.collection_without_spell(req.query)), delay)
+})
+
 app.get('/spells', async (req, res) => {
     // Introduce an artificial delay so user can see the effects of loading.    
     let delay = 500;  // default is 500. Can be overridden by query string.
@@ -131,17 +154,17 @@ app.get('/spells', async (req, res) => {
     setTimeout(async () => res.json(await DB.allSpells()), delay)
 })
 
-app.post('/spells', async (req, res) => {
+app.post('/spells', isAuthenticated, async (req, res) => {
     console.log("About to create a new spell");
 
     // With JSON data, req.body is the entire parsed JSON object
-    console.log(req.body);
+    console.log(req.body.item);
     if (req.body == undefined) {
         console.log("Failed to parse body")
         res.status(500)
         res.send({ message: 'Post request was unable to parse data' })
     } else {
-        DB.createSpell(req.body).then((data) => {
+        DB.createSpell(req.body.item).then((data) => {
             console.log("Sending:  ")
             console.log(data)
             res.json(data);
@@ -149,49 +172,49 @@ app.post('/spells', async (req, res) => {
     }
 })
 
-app.post('/spells/:id', async (req, res) => {
+app.post('/spells/:id', isAuthenticated, async (req, res) => {
     let uniqId = req.params.id;
     console.log("About to modify spell with Id " + uniqId);
-    console.log(req.body)
+    console.log(req.body.item)
 
     // Using != instead of !== here because :id matches as a string, 
     // while the body (parsed from JSON) will be a Number.
-    if (uniqId != req.body.id) {
+    if (uniqId != req.body.item.id) {
         res.status(500)
         res.send({message: "Problem with request format:  Id is inconsistent."})
         return;
     }
 
     // With JSON data, req.body is the entire parsed JSON object
-    if (req.body == undefined) {
+    if (req.body.item == undefined) {
         console.log("Failed to parse body")
         res.status(500)
         res.send({ message: 'Post request was unable to parse data' })
     } else {
-        DB.updateSpell(req.body).then((data) => {
+        DB.updateSpell(req.body.item).then((data) => {
             res.json(data);
         })
     }
 })
 
-app.delete('/spells/:id', async (req, res) => {
+app.delete('/spells/:id', isAuthenticated, async (req, res) => {
     let uniqId = req.params.id;
     console.log("About to delete spell with primary key " + uniqId);
-    console.log(req.body)
+    console.log(req.body.item)
 
-    if (uniqId != req.body.id) {
+    if (uniqId != req.body.item.id) {
         res.status(500)
         res.send({message: "Problem with request format:  Id is inconsistent."})
         return;
     }
 
     // With JSON data, req.body is the entire parsed JSON object
-    if (req.body == undefined) {
+    if (req.body.item == undefined) {
         console.log("Failed to parse body")
         res.status(500)
         res.send({ message: 'Delete request was unable to parse data' })
     } else {
-        DB.deleteSpell(req.body).then((data) => {
+        DB.deleteSpell(req.body.item).then((data) => {
             res.json(data);
         })
     }
@@ -207,6 +230,28 @@ app.get('/collections_search?', async (req, res) => {
     setTimeout(async () => res.json(await DB.collectionsearch(req.query)), delay)
 })
 
+app.get('/collections/:id/spells', async (req, res) => {
+    // Introduce an artificial delay so user can see the effects of loading.    
+    let delay = 500;  // default is 500. Can be overridden by query string.
+    if (req.query.hasOwnProperty('delay')) {
+        delay = req.query.delay;
+        console.log("Using a delay of =>" + delay + "<=");
+    }
+    console.log('Getting spells in collection')
+    setTimeout(async () => res.json(await DB.spells_in_collection(req.query)), delay)
+})
+
+app.get('/collections/:id/not_spells', async (req, res) => {
+    // Introduce an artificial delay so user can see the effects of loading.    
+    let delay = 500;  // default is 500. Can be overridden by query string.
+    if (req.query.hasOwnProperty('delay')) {
+        delay = req.query.delay;
+        console.log("Using a delay of =>" + delay + "<=");
+    }
+    console.log('Getting spells not in collection')
+    setTimeout(async () => res.json(await DB.spells_not_in_collection(req.query)), delay)
+})
+
 app.get('/collections', async (req, res) => {
     // Introduce an artificial delay so user can see the effects of loading.    
     let delay = 500;  // default is 500. Can be overridden by query string.
@@ -218,17 +263,17 @@ app.get('/collections', async (req, res) => {
     setTimeout(async () => res.json(await DB.allCollections()), delay)
 })
 
-app.post('/collections', async (req, res) => {
+app.post('/collections', isAuthenticated, async (req, res) => {
     console.log("About to create a new collection");
 
     // With JSON data, req.body is the entire parsed JSON object
-    console.log(req.body);
+    console.log(req.body.item);
     if (req.body == undefined) {
         console.log("Failed to parse body")
         res.status(500)
         res.send({ message: 'Post request was unable to parse data' })
     } else {
-        DB.createCollection(req.body).then((data) => {
+        DB.createCollection(req.body.item).then((data) => {
             console.log("Sending:  ")
             console.log(data)
             res.json(data);
@@ -236,49 +281,49 @@ app.post('/collections', async (req, res) => {
     }
 })
 
-app.post('/collections/:id', async (req, res) => {
+app.post('/collections/:id', isAuthenticated, async (req, res) => {
     let uniqId = req.params.id;
     console.log("About to modify collection with Id " + uniqId);
-    console.log(req.body)
+    console.log(req.body.item)
 
     // Using != instead of !== here because :id matches as a string, 
     // while the body (parsed from JSON) will be a Number.
-    if (uniqId != req.body.id) {
+    if (uniqId != req.body.item.id) {
         res.status(500)
         res.send({message: "Problem with request format:  Id is inconsistent."})
         return;
     }
 
     // With JSON data, req.body is the entire parsed JSON object
-    if (req.body == undefined) {
+    if (req.body.item == undefined) {
         console.log("Failed to parse body")
         res.status(500)
         res.send({ message: 'Post request was unable to parse data' })
     } else {
-        DB.updateCollection(req.body).then((data) => {
+        DB.updateCollection(req.body.item).then((data) => {
             res.json(data);
         })
     }
 })
 
-app.delete('/collections/:id', async (req, res) => {
+app.delete('/collections/:id', isAuthenticated, async (req, res) => {
     let uniqId = req.params.id;
     console.log("About to delete collection with primary key " + uniqId);
-    console.log(req.body)
+    console.log(req.body.item)
 
-    if (uniqId != req.body.id) {
+    if (uniqId != req.body.item.id) {
         res.status(500)
         res.send({message: "Problem with request format:  Id is inconsistent."})
         return;
     }
 
     // With JSON data, req.body is the entire parsed JSON object
-    if (req.body == undefined) {
+    if (req.body.item == undefined) {
         console.log("Failed to parse body")
         res.status(500)
         res.send({ message: 'Delete request was unable to parse data' })
     } else {
-        DB.deleteCollection(req.body).then((data) => {
+        DB.deleteCollection(req.body.item).then((data) => {
             res.json(data);
         })
     }
@@ -294,6 +339,28 @@ app.get('/users_search?', async (req, res) => {
     setTimeout(async () => res.json(await DB.usersearch(req.query)), delay)
 })
 
+app.get('/users/spells', async (req, res) => {
+    // Introduce an artificial delay so user can see the effects of loading.    
+    let delay = 500;  // default is 500. Can be overridden by query string.
+    if (req.query.hasOwnProperty('delay')) {
+        delay = req.query.delay;
+        console.log("Using a delay of =>" + delay + "<=");
+    }
+    console.log('Getting spells by the user')
+    setTimeout(async () => res.json(await DB.spells_by_user(req.query)), delay)
+})
+
+app.get('/users/collections', async (req, res) => {
+    // Introduce an artificial delay so user can see the effects of loading.    
+    let delay = 500;  // default is 500. Can be overridden by query string.
+    if (req.query.hasOwnProperty('delay')) {
+        delay = req.query.delay;
+        console.log("Using a delay of =>" + delay + "<=");
+    }
+    console.log('Getting collections by the user')
+    setTimeout(async () => res.json(await DB.collections_by_user(req.query)), delay)
+})
+
 app.get('/users', async (req, res) => {
     // Introduce an artificial delay so user can see the effects of loading.    
     let delay = 500;  // default is 500. Can be overridden by query string.
@@ -307,17 +374,15 @@ app.get('/users', async (req, res) => {
 
 app.post('/users', async (req, res) => {
     console.log("About to create a new user");
-    console.log(req.session.user)
+    console.log(req.body.user)
 
-    // With JSON data, req.body is the entire parsed JSON object
-    console.log(req.body);
-    if (req.body == undefined) {
+    if (req.body.user == undefined) {
         console.log("Failed to parse body")
         res.status(500)
         res.send({ message: 'Post request was unable to parse data' })
     } else {
         //console.log(res.session.user)
-        DB.createUser(req.body).then((data) => {
+        DB.createUser(req.body.user).then((data) => {
             console.log("Sending:  ")
             console.log(data)
             let newData = {data, req}
@@ -327,65 +392,156 @@ app.post('/users', async (req, res) => {
     }
 })
 
-app.post('/users/:id', async (req, res) => {
+app.post('/users/:id', isAuthenticated, async (req, res) => {
     let uniqId = req.params.id;
     console.log("About to modify user with Id " + uniqId);
-    console.log(req.body)
+    console.log(req.body.item)
 
     // Using != instead of !== here because :id matches as a string, 
     // while the body (parsed from JSON) will be a Number.
-    if (uniqId != req.body.id) {
+    if (uniqId != req.body.item.id) {
         res.status(500)
         res.send({message: "Problem with request format:  Id is inconsistent."})
         return;
     }
 
     // With JSON data, req.body is the entire parsed JSON object
-    if (req.body == undefined) {
+    if (req.body.item == undefined) {
         console.log("Failed to parse body")
         res.status(500)
         res.send({ message: 'Post request was unable to parse data' })
     } else {
-        DB.updateUser(req.body).then((data) => {
+        DB.updateUser(req.body.item).then((data) => {
             res.json(data);
         })
     }
 })
 
-app.delete('/users/:id', async (req, res) => {
+app.delete('/users/:id', isAuthenticated, async (req, res) => {
     let uniqId = req.params.id;
     console.log("About to delete user with primary key " + uniqId);
-    console.log(req.body)
+    console.log(req.body.item)
 
-    if (uniqId != req.body.id) {
+    if (uniqId != req.body.item.id) {
         res.status(500)
         res.send({message: "Problem with request format:  Id is inconsistent."})
         return;
     }
 
     // With JSON data, req.body is the entire parsed JSON object
-    if (req.body == undefined) {
+    if (req.body.item == undefined) {
         console.log("Failed to parse body")
         res.status(500)
         res.send({ message: 'Delete request was unable to parse data' })
     } else {
-        DB.deleteUser(req.body).then((data) => {
+        DB.deleteUser(req.body.item).then((data) => {
             res.json(data);
         })
     }
 })
 
-app.get('/login', (req, res) => {
-    console.log("What")
-    loginController.loginPage(req, res)
+app.get('/connections', async (req, res) => {
+    // Introduce an artificial delay so user can see the effects of loading.    
+    let delay = 500;  // default is 500. Can be overridden by query string.
+    if (req.query.hasOwnProperty('delay')) {
+        delay = req.query.delay;
+        console.log("Using a delay of =>" + delay + "<=");
+    }
+    console.log('Getting all connections')
+    setTimeout(async () => res.json(await DB.allConnections()), delay)
 })
+
+app.post('/connections', async (req, res) => {
+    console.log("About to create a new connection");
+    console.log(req.body.item)
+
+    if (req.body.item == undefined) {
+        console.log("Failed to parse body")
+        res.status(500)
+        res.send({ message: 'Post request was unable to parse data' })
+    } else {
+        //console.log(res.session.user)
+        DB.createConnection(req.body.item).then((data) => {
+            console.log("Sending:  ")
+            console.log(data)
+            let newData = {data, req}
+            //res.json({ user: req.session.user });
+            res.json(data);
+        })
+    }
+})
+
+app.delete('/connections/:id', isAuthenticated, async (req, res) => {
+    console.log("About to delete connection");
+    console.log(req.body.item)
+
+    // With JSON data, req.body is the entire parsed JSON object
+    if (req.body.item == undefined) {
+        console.log("Failed to parse body")
+        res.status(500)
+        res.send({ message: 'Delete request was unable to parse data' })
+    } else {
+        DB.deleteConnection(req.body.item).then((data) => {
+            res.json(data);
+        })
+    }
+})
+
 
 app.post('/login', (req, res) => {
     loginController.requestLogin(req, res)
+    DB.userlogin(req.body.user).then((data) => {
+        console.log('data', data)
+        if (data.length === 1) {
+            //req.session.user = data[0].username
+            console.log('req.session', req.session)
+            req.session.save(err => {
+                if (err) {
+                    console.error(err);
+                    return res.status(500).send('Error saving session')
+                }
+                res.session = req.session
+                console.log('res.session', res.session)
+                res.send(data[0]);
+            });
+        } else {
+            res.status(401).send('Invalid credentials')
+        }
+    })
+})
+
+app.post('/signup', (req, res) => {
+    //loginController.requestLogin(req, res)
+    DB.createUser(req.body).then((data) => {
+        if (data.length === 1) {
+            req.session.user = data[0].username
+            console.log(req.session)
+            req.session.save(err => {
+                if (err) {
+                    console.error(err);
+                    return res.status(500).send('Error saving session')
+                }
+                res.session = req.session
+                res.session.save()
+                console.log(res.session)
+                res.send(data[0]);
+            });
+        } else {
+            res.status(401).send('Invalid credentials')
+        }
+    })
+})
+
+app.get('/api/session', (req, res) => {
+    if (req.session.username) {
+        res.status(200).json({ username: req.session.username })
+    } else {
+        res.status(401).send('Unauthorized');
+    }
 })
 
 // Logout
-app.get('/logout', (req, res) => {
+app.post('/logout', (req, res) => {
     loginController.logout(req, res)
 })
 

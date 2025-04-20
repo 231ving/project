@@ -39,6 +39,7 @@
 
 html {
   background-color: beige;
+  align-content: center;
 }
 
 body {
@@ -67,28 +68,6 @@ div.spells {
   padding-top: 20px;
   margin: auto;
   margin-bottom: 3px;
-}
-
-div.spellbook_description {
-  padding-bottom: 20px;
-  text-align: center;
-  width: 500px;
-  margin: auto;
-}
-
-div p.spellbook_description {
-  text-align: left;
-  margin-top: 5px;
-}
-
-div p.spellbook_description.left {
-  text-align: center;
-  margin-bottom: 5px;
-}
-
-.spellbook_description p {
-  font-style: italic;
-  margin: auto;
 }
 
 div.spelldetails > * {
@@ -158,32 +137,44 @@ a.button:hover {
 
 .history {
   border: 2px outset buttonborder;
-  width: 20%;
+  width: 60%;
 }
 
 .random_spell {
-  margin-top: 50px;
+  margin-top: 20px;
   border: 2px outset buttonborder;
-  width: 20%;
+  width: 80%;
 }
 
 .single_spell {
   border: 2px outset buttonborder;
-  border-bottom: 0px;
+  margin: 10px;
+  background-color: rgb(227, 227, 181);
 }
 
-.single_spell:last-child {
-  border: 2px outset buttonborder;
+input {
+  background-color: rgb(227, 227, 181);
 }
 
-.row.spell {
+.spell {
   border-top: 2px outset buttonborder;
-}
-
-.spell_desc {
-  border-top: 2px outset buttonborder;
+  padding-top: 10px;
 }
 
 ul {
   text-align: left;
+}
+
+.container {
+  padding-bottom: 10px;
+}
+
+.connection {
+  margin-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: 2px outset buttonborder;
+}
+
+input:focus {
+  background-color: rgba(255, 255, 255, 0.776);
 }

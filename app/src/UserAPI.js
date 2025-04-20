@@ -22,6 +22,24 @@ export default class UserAPI {
     })
   }
 
+  static fetchSpellsByUser(user) {
+    // You can configure a delay on the API if you 
+    // want to see what happens if the server is slow.
+    let parameters = new URLSearchParams(user).toString()
+    return fetch(`${apiURL}/users/spells?${parameters}`).then(response => {
+      return response.json()
+    })
+  }
+
+  static fetchCollectionsByUser(user) {
+    // You can configure a delay on the API if you 
+    // want to see what happens if the server is slow.
+    let parameters = new URLSearchParams(user).toString()
+    return fetch(`${apiURL}/users/collections?${parameters}`).then(response => {
+      return response.json()
+    })
+  }
+
   static addUser(user) {
     const options = {
       method: 'POST',
@@ -29,9 +47,10 @@ export default class UserAPI {
         Accept: 'application/json',
         'Content-Type': 'application/json;charset=UTF-8'
       },
-      body: JSON.stringify(user)
+      body: JSON.stringify({user: user})
     }
     console.log('Attempting to post new user')
+    console.log(user)
 
     return fetch(`${apiURL}/users/`, options).then(async response => {
       if (response.ok) {
@@ -44,8 +63,9 @@ export default class UserAPI {
     })
   }
 
-  static modifyUser(user) {
-    if (!user.id) {
+  static modifyUser(target, user) {
+    console.log(target)
+    if (!target.id) {
       throw new Error('user must have an id to update')
     }
 
@@ -55,12 +75,12 @@ export default class UserAPI {
         Accept: 'application/json',
         'Content-Type': 'application/json;charset=UTF-8'
       },
-      body: JSON.stringify(user)
+      body: JSON.stringify({item: target, user: user})
     }
     console.log('Attempting to post modification to user')
     console.log(user)
 
-    return fetch(`${apiURL}/users/${user.id}`, options).then(async response => {
+    return fetch(`${apiURL}/users/${target.id}`, options).then(async response => {
       if (response.ok) {
         console.log('Response was ok')
         return response.json()
@@ -71,8 +91,8 @@ export default class UserAPI {
     })
   }
 
-  static deleteUser(user) {
-    if (!user.id) {
+  static deleteUser(target, user) {
+    if (!target.id) {
       throw new Error('user must have an id to update')
     }
 
@@ -82,12 +102,12 @@ export default class UserAPI {
         Accept: 'application/json',
         'Content-Type': 'application/json;charset=UTF-8'
       },
-      body: JSON.stringify(user)
+      body: JSON.stringify({item: target, user: user})
     }
     console.log('Attempting to post modification to user')
     console.log(user)
 
-    return fetch(`${apiURL}/users/${user.id}`, options).then(async response => {
+    return fetch(`${apiURL}/users/${target.id}`, options).then(async response => {
       if (response.ok) {
         console.log('Response was ok')
         return response.json()
@@ -97,4 +117,28 @@ export default class UserAPI {
       }
     })
   }
+
+  static loginUser(user) {
+    const options = {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8'
+      },
+      body: JSON.stringify({user: user})
+    }
+    console.log('Attempting to get data to login to user')
+    console.log(user)
+
+    return fetch(`${apiURL}/login`, options).then(async response => {
+      if (response.ok) {
+        console.log('Response was ok')
+        return response.json()
+      } else {
+        console.log('There was a error')
+        throw new Error(`Problem with GET:  ${(await response.json()).message}`)
+      }
+    })
+  }
+
 }

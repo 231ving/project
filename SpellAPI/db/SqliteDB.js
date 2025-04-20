@@ -25,22 +25,22 @@ class SqliteDB {
             this.db.run('INSERT INTO Spells (name, description, spell_school, action_type, effect_magnitude, effect_area, effect_range, effect_count, effect_duration, spell_cost, spell_resource, source_name, source_link, public_status, modifiable) VALUES ("Minor Heal", "Call down rejuvenating light to heal wounds.", "Holy Magic", "Reaction", 20, 1, 20, 5, 2, 35, "Divine Favor", "Original Content", "None", 1, 1);')
             this.db.run('INSERT INTO Spells (name, description, spell_school, action_type, effect_magnitude, effect_area, effect_range, effect_count, effect_duration, spell_cost, spell_resource, source_name, source_link, public_status, modifiable) VALUES ("Life Drain", "Drain lifeforce with a touch.", "Death Magic", "Main Action", 100, 0, 0, 1, 2, 80, "Spirit", "Original Content", "None", 1, 1);')
             this.db.run('INSERT INTO Spells (name, description, spell_school, action_type, effect_magnitude, effect_area, effect_range, effect_count, effect_duration, spell_cost, spell_resource, source_name, source_link, public_status, modifiable) VALUES ("Meteor Rain", "Call upon heavenly judgement.", "Legendary Magic", "Ritual", 1000, 100, 10000, 50, 10, 10000, "Mana", "Original Content", "None", 1, 1);')
-            this.db.run('INSERT INTO Spells (name, description, spell_school, action_type, effect_magnitude, effect_area, effect_range, effect_count, effect_duration, spell_cost, spell_resource, source_name, source_link, public_status, modifiable) VALUES ("Manathrust", "A bolt of raw magic.", "Arcane Magic", "Main Action", 20, 0, 10, 1, 0, 10, "Mana", "Tales of MajEyal", "https://te4.org/wiki/Manathrust_(talent)", 1, 1);')
+            this.db.run('INSERT INTO Spells (name, description, spell_school, action_type, effect_magnitude, effect_area, effect_range, effect_count, effect_duration, spell_cost, spell_resource, source_name, source_link, public_status, modifiable) VALUES ("Manathrust", "A bolt of raw magic.", "Arcane Magic", "Main Action", 20, 0, 10, 1, 0, 10, "Mana", "231vingUSER", "https://te4.org/wiki/Manathrust_(talent)", 1, 1);')
             this.db.run('INSERT INTO Spells (name, description, spell_school, action_type, effect_magnitude, effect_area, effect_range, effect_count, effect_duration, spell_cost, spell_resource, source_name, source_link, public_status, modifiable) VALUES ("Mana Orb", "Fire an orb of dense Mana.", "Destruction Magic", "Main Action", 10, 0, 10, 1, 0, 10, "Mana", "Original Content", "None", 1, 1);')
             this.db.run('INSERT INTO Spells (name, description, spell_school, action_type, effect_magnitude, effect_area, effect_range, effect_count, effect_duration, spell_cost, spell_resource, source_name, source_link, public_status, modifiable) VALUES ("Mana Arrow", "Fire a sharp arrow of Mana.", "Destruction Magic", "Main Action", 20, 0, 20, 1, 0, 15, "Mana", "Original Content", "None", 1, 1);')
             this.db.run('INSERT INTO Spells (name, description, spell_school, action_type, effect_magnitude, effect_area, effect_range, effect_count, effect_duration, spell_cost, spell_resource, source_name, source_link, public_status, modifiable) VALUES ("Mage Hand", "Summon a magical construct in the shape of a hand. It obeys your will.", "Conjuration Magic", "Main Action", 5, 0, 20, 1, 10, 20, "Mana", "Original Content", "None", 1, 1)')
             this.db.run('INSERT INTO Spells (name, description, spell_school, action_type, effect_magnitude, effect_area, effect_range, effect_count, effect_duration, spell_cost, spell_resource, source_name, source_link, public_status, modifiable) VALUES ("Mana Draw", "The caster draws in ambient Mana to replenish their Mana reserves.", "Restoration Magic", "Main Action", 50, 10, 0, 1, 0, 10, "Mana", "Original Content", "None", 1, 1)')
-            this.db.run('INSERT INTO Spells (name, description, spell_school, action_type, effect_magnitude, effect_area, effect_range, effect_count, effect_duration, spell_cost, spell_resource, source_name, source_link, public_status, modifiable) VALUES ("Candlelight", "Create a floating orb to illuminate the darkness.", "Conjuration Magic", "Main Action", 20, 10, 0, 1, 10, 10, "Mana", "Original Content", "None", 1, 1)')
+            this.db.run('INSERT INTO Spells (name, description, spell_school, action_type, effect_magnitude, effect_area, effect_range, effect_count, effect_duration, spell_cost, spell_resource, source_name, source_link, public_status, modifiable) VALUES ("Candlelight", "Create a floating orb to illuminate the darkness.", "Conjuration Magic", "Main Action", 20, 10, 0, 1, 10, 10, "Mana", "231vingUSER", "None", 1, 1)')
             this.db.run('INSERT INTO Spells (name, description, spell_school, action_type, effect_magnitude, effect_area, effect_range, effect_count, effect_duration, spell_cost, spell_resource, source_name, source_link, public_status, modifiable) VALUES ("Oakflesh", "Alter your body to as durable as oak.", "Alteration Magic", "Main Action", 30, 0, 0, 1, 60, 50, "Mana", "Original Content", "None", 1, 1)')
             this.db.run('INSERT INTO Spells (name, description, spell_school, action_type, effect_magnitude, effect_area, effect_range, effect_count, effect_duration, spell_cost, spell_resource, source_name, source_link, public_status, modifiable) VALUES ("Mana Vortices", "Create rampaging vortices of violent Mana to shred apart armies.", "Destruction Magic", "Main Action", 10000, 1000, 10000, 10, 100, 5000, "Mana", "Original Content", "None", 1, 1)')
             this.db.run('INSERT INTO Spells (name, description, spell_school, action_type, effect_magnitude, effect_area, effect_range, effect_count, effect_duration, spell_cost, spell_resource, source_name, source_link, public_status, modifiable) VALUES ("Resurrect", "Returns life to the dead, if only for a time.", "Restoration Magic", "Main Action", 1000, 0, 5, 1, 100, 10000, "Mana", "Original Content", "None", 1, 1)')
-            this.db.run('INSERT INTO Spells (name, description, spell_school, action_type, effect_magnitude, effect_area, effect_range, effect_count, effect_duration, spell_cost, spell_resource, source_name, source_link, public_status, modifiable) VALUES ("Great Shift", "The pinnacle of teleportation magic, capable of transporting armies across entire nations", "Spatial Magic", "Main Action", 100000, 10000, 1000000, 1, 0, 8000, "Mana", "Original Content", "None", 1, 1)')
-            this.db.run('INSERT INTO Spells (name, description, spell_school, action_type, effect_magnitude, effect_area, effect_range, effect_count, effect_duration, spell_cost, spell_resource, source_name, source_link, public_status, modifiable) VALUES ("Word of Death", "A blasphemous spell stolen from the God of Death itself.", "Necromantic Magic", "reaction", 500, 0, 10, 1, 0, 50, "Mana", "Original Content", "None", 1, 1)')
+            this.db.run('INSERT INTO Spells (name, description, spell_school, action_type, effect_magnitude, effect_area, effect_range, effect_count, effect_duration, spell_cost, spell_resource, source_name, source_link, public_status, modifiable) VALUES ("Great Shift", "The pinnacle of teleportation magic, capable of transporting armies across entire nations", "Spatial Magic", "Main Action", 100000, 10000, 1000000, 1, 0, 8000, "Mana", "231vingADMIN", "None", 1, 1)')
+            this.db.run('INSERT INTO Spells (name, description, spell_school, action_type, effect_magnitude, effect_area, effect_range, effect_count, effect_duration, spell_cost, spell_resource, source_name, source_link, public_status, modifiable) VALUES ("Word of Death", "A blasphemous spell stolen from the God of Death itself.", "Necromantic Magic", "reaction", 500, 0, 10, 1, 0, 50, "Mana", "231vingADMIN", "None", 1, 1)')
         
             this.db.run('CREATE TABLE Collections (id INTEGER PRIMARY KEY, name TEXT NOT NULL, description TEXT NOT NULL, source_name TEXT NOT NULL, source_link TEXT, public_status INTEGER NOT NULL, modifiable INTEGER NOT NULL);')
-            this.db.run('INSERT INTO Collections (name, description, source_name, source_link, public_status, modifiable) VALUES ("Ice Magic", "Magic manipulating ice.", "Original Content", "None", 1, 1);')
-            this.db.run('INSERT INTO Collections (name, description, source_name, source_link, public_status, modifiable) VALUES ("Elemental Magic", "Magic manipulating the base elements.", "Original Content", "None", 1, 1);')
-            this.db.run('INSERT INTO Collections (name, description, source_name, source_link, public_status, modifiable) VALUES ("Holy Magic", "Divine magic that calls upon the gods.", "Original Content", "None", 1, 1);')
+            this.db.run('INSERT INTO Collections (name, description, source_name, source_link, public_status, modifiable) VALUES ("Ice Magic", "Magic manipulating ice.", "231vingADMIN", "None", 1, 1);')
+            this.db.run('INSERT INTO Collections (name, description, source_name, source_link, public_status, modifiable) VALUES ("Elemental Magic", "Magic manipulating the base elements.", "231vingADMIN", "None", 1, 1);')
+            this.db.run('INSERT INTO Collections (name, description, source_name, source_link, public_status, modifiable) VALUES ("Holy Magic", "Divine magic that calls upon the gods.", "231vingUSER", "None", 1, 1);')
             this.db.run('INSERT INTO Collections (name, description, source_name, source_link, public_status, modifiable) VALUES ("Necromancy", "Necromantic magic that calls upon death.", "Original Content", "None", 1, 1);')
             this.db.run('INSERT INTO Collections (name, description, source_name, source_link, public_status, modifiable) VALUES ("Arcane Magic", "The magic of the Arcane. The foundation of all Apprentice spells.", "Original Content", "None", 1, 1);')
         
@@ -91,6 +91,17 @@ class SqliteDB {
         })
     }
 
+    static allConnections() {
+        return new Promise((resolve, _reject) => {
+            this.db.all('SELECT * from Connection', (err, response) => {
+                //console.log('Select all')
+                //console.log(err)
+                //console.log(response)
+                resolve(response.map((item) => item))
+            })
+        })
+    }
+
     static createSpell(description) {
         let newSpell = new Spell(description)
         if (newSpell.isValid()) {
@@ -129,7 +140,7 @@ class SqliteDB {
         let newUser = new User(description)
         if (newUser.isValid()) {
             return new Promise((resolve, _reject) => {
-                this.db.run(`INSERT INTO Users (email, username, password, admin) VALUES ("${newUser.email}", "${newUser.username}", "${newUser.password}", "${newUser.admin}")`,
+                this.db.run(`INSERT INTO Users (email, username, password, admin) VALUES ("${newUser.email}", "${newUser.username}", "${newUser.password}", "${0}")`,
                     function(_err, _data) {
                         newUser.id = this.lastID
                         resolve(newUser)
@@ -142,11 +153,18 @@ class SqliteDB {
         }
     }
 
+    static createConnection(connection) {
+        return new Promise((resolve, _reject) => {
+            this.db.run(`INSERT INTO Connection (spell_id, collection_id) VALUES ("${connection.spell.id}", "${connection.collection.id}")`)
+            resolve(this.allConnections())
+        })
+    }
+
     static updateSpell(spell) {
         let updatedSpell = new Spell(spell)
         if (updatedSpell.isValid()) {
             return new Promise((resolve, _reject) => {
-                this.db.run(`UPDATE Spells SET name="${spell.name}", description="${spell.description}", spell_school="${spell.spell_school}", action_type="${spell.action_type}", effect_magnitude="${spell.effect_magnitude}", effect_area="${spell.effect_area}", effect_range="${spell.effect_range}", effect_count="${spell.effect_count}", effect_duration="${spell.effect_duration}", spell_cost="${spell.spell_cost}", spell_resource="${spell.spell_resource}", source_name="${spell.source_name}", source_link="${spell.source_link}", public_status="${spell.public_status}", modifiable="${spell.modifiable}" where id="${spell.id}"`)
+                this.db.run(`UPDATE Spells SET name="${spell.name}", description="${spell.description}", spell_school="${spell.spell_school}", action_type="${spell.action_type}", effect_magnitude="${spell.effect_magnitude}", effect_area="${spell.effect_area}", effect_range="${spell.effect_range}", effect_count="${spell.effect_count}", effect_duration="${spell.effect_duration}", spell_cost="${spell.spell_cost}", spell_resource="${spell.spell_resource}", source_name="${spell.source_name}", source_link="${spell.source_link}", public_status="${Number(spell.public_status)}", modifiable="${Number(spell.modifiable)}" where id="${spell.id}"`)
                 resolve(spell)
             })
         }
@@ -156,7 +174,7 @@ class SqliteDB {
         let updatedCollection = new Collection(collection)
         if (updatedCollection.isValid()) {
             return new Promise((resolve, _reject) => {
-                this.db.run(`UPDATE Collections SET name="${collection.name}", description="${collection.description}", source_name="${collection.source_name}", source_link="${collection.source_link}", public_status="${collection.public_status}", modifiable="${collection.modifiable}" where id="${collection.id}"`)
+                this.db.run(`UPDATE Collections SET name="${collection.name}", description="${collection.description}", source_name="${collection.source_name}", source_link="${collection.source_link}", public_status="${Number(collection.public_status)}", modifiable="${Number(collection.modifiable)}" where id="${collection.id}"`)
                 resolve(collection)
             })
         }
@@ -175,6 +193,7 @@ class SqliteDB {
     static deleteSpell(spell) {
         //this.db.get('PRAGMA foreign_keys = ON');
         return new Promise((resolve, _reject) => {
+            this.db.run(`DELETE FROM Connection where spell_id="${spell.id}"`)
             this.db.run(`DELETE FROM Spells where id="${spell.id}"`)
             resolve(spell)
         })
@@ -183,15 +202,24 @@ class SqliteDB {
     static deleteCollection(collection) {
         //this.db.get('PRAGMA foreign_keys = ON');
         return new Promise((resolve, _reject) => {
+            this.db.run(`DELETE FROM Connection where collection_id="${collection.id}"`)
             this.db.run(`DELETE FROM Collections where id="${collection.id}"`)
-            resolve(collection)
+            resolve(this.allConnections())
         })
     }
 
     static deleteUser(user) {
         return new Promise((resolve, _reject) => {
-            this.db.run(`DELETE FROM Users where email="${user.email} AND id="${user.id}"`)
+            this.db.run(`DELETE FROM Users where email="${user.email}" AND username="${user.username}" AND password="${user.password}" AND id="${user.id}"`)
             resolve(user)
+        })
+    }
+
+    static deleteConnection(connection) {
+        console.log('connection', connection)
+        return new Promise((resolve, _reject) => {
+            this.db.run(`DELETE FROM Connection where spell_id="${connection.spell.id}" AND collection_id="${connection.collection.id}"`)
+            resolve(connection)
         })
     }
 
@@ -214,7 +242,7 @@ class SqliteDB {
 
     static collectionsearch(collection) {
         return new Promise((resolve, reject) => {
-            this.db.all(`SELECT * from Collections where name LIKE "%${collection.name}%" OR description LIKE "%${collection.description}" OR source_name LIKE "%${collection.source_name}%" OR source_link LIKE "%${collection.source_link}%";`, (err, rows) => {
+            this.db.all(`SELECT * from Collections where name LIKE "%${collection.name}%" AND description LIKE "%${collection.description}%" AND source_name LIKE "%${collection.source_name}%" AND source_link LIKE "%${collection.source_link}%";`, (err, rows) => {
                 if (err) {
                     reject(`Problem finding collections: ${err}`)
                 } else {
@@ -230,7 +258,7 @@ class SqliteDB {
 
     static usersearch(user) {
         return new Promise((resolve, reject) => {
-            this.db.all(`SELECT * from Users where id LIKE "%${user.id}" AND username LIKE "%${user.username}";`, (err, rows) => {
+            this.db.all(`SELECT * from Users where username LIKE "%${user.username}%" AND email LIKE "%${user.email}%"`, (err, rows) => {
                 if (err) {
                     reject(`Problem finding users: ${err}`)
                 } else {
@@ -243,7 +271,121 @@ class SqliteDB {
             return this.allUsers()
         })
     }
-}  
+
+    static userlogin(user) {
+        console.log(user)
+        return new Promise((resolve, reject) => {
+            this.db.all(`SELECT * from Users where username="${user.username}" AND password="${user.password}"`, (err, rows) => {
+                if (err) {
+                    reject(`Problem finding users: ${err}`)
+                } else {
+                    console.log(rows)
+                    resolve(rows.map((row) => new User(row)))
+                }
+            })
+        }).catch(problem => {
+            console.log(problem)
+            console.log(user)
+            return this.allUsers()
+        })
+    }
+
+    static spells_in_collection(collection) {
+        return new Promise((resolve, reject) => {
+            this.db.all(`SELECT * from Spells where id IN (select spell_id from Connection where collection_id="${collection.id}");`, (err, rows) => {
+                if (err) {
+                    reject(`Problem finding spells in that collection: ${err}`)
+                } else {
+                    resolve(rows.map((row) => new Spell(row)))
+                }
+            })
+        }).catch(problem => {
+            console.log(problem)
+            console.log(collection)
+            return this.allSpells()
+        })
+    }
+
+    static spells_not_in_collection(collection) {
+        return new Promise((resolve, reject) => {
+            this.db.all(`SELECT * from Spells where id NOT IN (select spell_id from Connection where collection_id="${collection.id}");`, (err, rows) => {
+                if (err) {
+                    reject(`Problem finding spells not in that collection: ${err}`)
+                } else {
+                    resolve(rows.map((row) => new Spell(row)))
+                }
+            })
+        }).catch(problem => {
+            console.log(problem)
+            console.log(collection)
+            return this.allSpells()
+        })
+    }
+
+    static collection_with_spell(spell) {
+        return new Promise((resolve, reject) => {
+            this.db.all(`SELECT * from Collections where id IN (select collection_id from Connection where spell_id="${spell.id}");`, (err, rows) => {
+                if (err) {
+                    reject(`Problem finding collections with that spell: ${err}`)
+                } else {
+                    resolve(rows.map((row) => new Collection(row)))
+                }
+            })
+        }).catch(problem => {
+            console.log(problem)
+            console.log(spell)
+            return this.allCollections()
+        })
+    }
+
+    static collection_without_spell(spell) {
+        return new Promise((resolve, reject) => {
+            this.db.all(`SELECT * from Collections where id NOT IN (select collection_id from Connection where spell_id="${spell.id}");`, (err, rows) => {
+                if (err) {
+                    reject(`Problem finding collections without that spell: ${err}`)
+                } else {
+                    resolve(rows.map((row) => new Collection(row)))
+                }
+            })
+        }).catch(problem => {
+            console.log(problem)
+            console.log(spell)
+            return this.allCollections()
+        })
+    }
+
+    static spells_by_user(user) {
+        return new Promise((resolve, reject) => {
+            this.db.all(`SELECT * from Spells where source_name="${user.username}";`, (err, rows) => {
+                if (err) {
+                    reject(`Problem finding spells by that user: ${err}`)
+                } else {
+                    resolve(rows.map((row) => new Spell(row)))
+                }
+            })
+        }).catch(problem => {
+            console.log(problem)
+            console.log(user)
+            return this.allSpells()
+        })
+    }
+
+    static collections_by_user(user) {
+        return new Promise((resolve, reject) => {
+            this.db.all(`SELECT * from Collections where source_name="${user.username}";`, (err, rows) => {
+                if (err) {
+                    reject(`Problem finding collections by that user: ${err}`)
+                } else {
+                    resolve(rows.map((row) => new Collection(row)))
+                }
+            })
+        }).catch(problem => {
+            console.log(problem)
+            console.log(user)
+            return this.allCollections()
+        })
+    }
+}
 
 SqliteDB.db = new sqlite3.Database(__dirname + 'spells.sqlite')
 module.exports = SqliteDB
