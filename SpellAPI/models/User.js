@@ -32,7 +32,7 @@ class User {
 
     isValid() {
         this.errors = []
-        if (!this.email || this.email <= 2) {
+        if (!this.email || this.email <= 0) {
             this.errors.push('The account must have an email.')
         }
         if (!this.username || this.username.length <= 0) {

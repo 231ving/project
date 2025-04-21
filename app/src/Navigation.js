@@ -6,7 +6,18 @@ import { useLocation, Link, useNavigate } from 'react-router-dom'
 export function Home( {currspellhistory, spells, currcollectionhistory, collections, loading, message, onSetSpellHistoryClicked = f => f, onSetCollectionHistoryClicked = f => f} ) {
   const navigate = useNavigate()
   let random_int_spell = Math.round(Math.random() * spells.length)
+  if (spells.length > 0) {
+    while (spells[random_int_spell].public_status !== 1) {
+      random_int_spell = Math.round(Math.random() * spells.length)
+    }
+  }
   let random_int_collection = Math.round(Math.random() * collections.length)
+  if (collections.length > 0) {
+    while (collections[random_int_collection].public_status !== 1) {
+      random_int_collection = Math.round(Math.random() * collections.length)
+    }
+  }
+
   if (message) {
     return <div>{message}</div>
   } else if (loading) {

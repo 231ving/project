@@ -2,7 +2,7 @@
 // Currently having issues with input boxes deselecting after every change in input
 import { useNavigate } from 'react-router-dom'
 
-export default function SearchCollectionForm({ editMode, collectionToEdit, onUpdate = f => f, onSubmit = f => f, onCancelEdit = f => f, onSearch = f => f, onResetFilter = f => f}) {
+export default function SearchCollectionForm({ editMode, collectionToEdit, currUser, onUpdate = f => f, onSubmit = f => f, onCancelEdit = f => f, onSearch = f => f, onResetFilter = f => f}) {
     const navigate = useNavigate()
     function error_log()  {
         if (collectionToEdit.errors.length !== 0) {
@@ -13,6 +13,14 @@ export default function SearchCollectionForm({ editMode, collectionToEdit, onUpd
                     ))}
                 </ul>
             </div>
+        }
+    }
+
+    function onAdd() {
+        if (currUser.username) {
+            navigate(`/collections/new`)
+        } else {
+            navigate(`/login`)
         }
     }
     
@@ -54,7 +62,7 @@ export default function SearchCollectionForm({ editMode, collectionToEdit, onUpd
                 required
             />
             {/* <button> by default will submit a form.  If you don't want this behavior, set the type to 'button'*/}
-            <button className='col-sm-3 col-s-6 col-6' onClick={() => navigate(`/collections/new`)} type='submit'>Add Collection</button>
+            <button className='col-sm-3 col-s-6 col-6' onClick={() => onAdd()} type='submit'>Add Collection</button>
             <button className='col-sm-3 col-s-6 col-6' type='button' onClick={() => onSearch(collectionToEdit)}>Search Using Filters</button>
             <button className='col-sm-3 col-s-6 col-6' type='button' onClick={() => onCancelEdit(collectionToEdit)}>Clear Filter Boxes</button>
             <button className='col-sm-3 col-s-6 col-6' type='button' onClick={() => onResetFilter()}>Reset List</button>

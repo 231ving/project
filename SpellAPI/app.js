@@ -91,6 +91,18 @@ app.options('/users', (req, res) => {
     res.send()
 })
 
+app.options('/logout', (req, res) => {
+    console.log('Received options from preflight')
+    console.log(req.headers)
+    res.send()
+})
+
+app.options('/login', (req, res) => {
+    console.log('Received options from preflight')
+    console.log(req.headers)
+    res.send()
+})
+
 if (myArgs[0] === '--test') {
     app.get('/reset', (req, res) => {
         DB.reset();
@@ -491,15 +503,14 @@ app.delete('/connections/:id', isAuthenticated, async (req, res) => {
 app.post('/login', (req, res) => {
     loginController.requestLogin(req, res)
     DB.userlogin(req.body.user).then((data) => {
-        if (data.length === 1) {
-            console.log(data)
+        if (data.length >= 1) {
+            //console.log('login data', data)
             req.session.save(err => {
                 if (err) {
                     console.error(err);
                     return res.status(500).send('Error saving session')
                 }
                 res.session = req.session
-                console.log('res.session', res.session)
                 res.send(data[0]);
             });
         } else {
@@ -513,7 +524,6 @@ app.post('/signup', (req, res) => {
     DB.createUser(req.body).then((data) => {
         if (data.length === 1) {
             req.session.user = data[0].username
-            console.log(req.session)
             req.session.save(err => {
                 if (err) {
                     console.error(err);
@@ -521,7 +531,6 @@ app.post('/signup', (req, res) => {
                 }
                 res.session = req.session
                 res.session.save()
-                console.log(res.session)
                 res.send(data[0]);
             });
         } else {
@@ -541,6 +550,13 @@ app.get('/api/session', (req, res) => {
 // Logout
 app.post('/logout', (req, res) => {
     loginController.logout(req, res)
+    DB.userlogin(req.body.user).then((data) => {
+        if (data.length >= 1) {
+            res.send(data[0]);
+        } else {
+            res.status(401).send('Invalid credentials')
+        }
+    })
 })
 
 /* Launch the server */

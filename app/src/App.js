@@ -402,6 +402,7 @@ function SpellCollections(props) {
     localStorage.setItem('user', JSON.stringify({
       username: "", email: "", password: "", admin: 0
     }))
+    UserAPI.logoutUser(currUser)
     setUserToEdit(defaultUser)
     setCurrUser(defaultUser)
   }
@@ -548,7 +549,7 @@ function SpellCollections(props) {
         />
         <Route path="/spells" element={
           <>
-            <SearchSpellForm editMode={editMode} spellToEdit={spellToEdit} onUpdate={updateFormDataSpell} onSubmit={submitSpell} onCancelEdit={cancelEditSpell} onSearch={searchSpell} onResetFilter={resetFilters}/>
+            <SearchSpellForm editMode={editMode} spellToEdit={spellToEdit} currUser={currUser} onUpdate={updateFormDataSpell} onSubmit={submitSpell} onCancelEdit={cancelEditSpell} onSearch={searchSpell} onResetFilter={resetFilters}/>
             <SpellList spells={currentSpells} currUser={currUser} loading={loading} message={message} onSetSpellHistoryClicked={setNewSpellHistory} onCopySpell={copySpell} onEditSpell={editSpell} onDeleteSpell={deleteSpell} />
           </>}
         />
@@ -566,7 +567,7 @@ function SpellCollections(props) {
         />
         <Route path="/collections" element={
           <>
-            <SearchCollectionForm editMode={editMode} collectionToEdit={collectionToEdit} onUpdate={updateFormDataCollection} onSubmit={submitCollection} onCancelEdit={cancelEditCollection} onSearch={searchCollection} onResetFilter={resetFilters}/>
+            <SearchCollectionForm editMode={editMode} collectionToEdit={collectionToEdit} currUser={currUser} onUpdate={updateFormDataCollection} onSubmit={submitCollection} onCancelEdit={cancelEditCollection} onSearch={searchCollection} onResetFilter={resetFilters}/>
             <CollectionList collections={currentCollections} currUser={currUser} loading={loading} message={message} onSetCollectionHistoryClicked={setNewCollectionHistory} onCopyCollection={copyCollection} onEditCollection={editCollection} onDeleteCollection={deleteCollection} /> 
           </>}
          />
