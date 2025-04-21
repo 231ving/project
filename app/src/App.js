@@ -593,7 +593,7 @@ function SpellCollections(props) {
           </>}
          />
         <Route path="/users/:id" element={
-            <UserDetails users={currentUsers} currUser={currUser} spells={currentSpells} collections={currentCollections} loading={loading} message={message} onEditUser={editUser} onDeleteUser={deleteUser} />
+            <UserDetails users={currentUsers} currUser={currUser} spells={currentSpells} collections={currentCollections} loading={loading} message={message} onEditUser={editUser} onDeleteUser={deleteUser} onEditSpell={editSpell} onCopySpell={copySpell} onDeleteSpell={deleteSpell} onEditCollection={editCollection} onCopyCollection={copyCollection} onDeleteCollection={deleteCollection} />
           }
          />
          <Route path="/users/:id/edit" element={
