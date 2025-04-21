@@ -279,7 +279,7 @@ class SqliteDB {
                 if (err) {
                     reject(`Problem finding users: ${err}`)
                 } else {
-                    console.log(rows)
+                    console.log('users found', rows)
                     resolve(rows.map((row) => new User(row)))
                 }
             })

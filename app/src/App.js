@@ -414,6 +414,8 @@ function SpellCollections(props) {
         setCurrUser(data)
         setLoggedInMode(true)
         setloginMode(true)
+        console.log('data from fetch', data)
+        navigate(`/users/${data.id}`)
       }).catch(error => {
         console.log('Error of:', error)
       })

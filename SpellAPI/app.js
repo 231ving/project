@@ -491,10 +491,8 @@ app.delete('/connections/:id', isAuthenticated, async (req, res) => {
 app.post('/login', (req, res) => {
     loginController.requestLogin(req, res)
     DB.userlogin(req.body.user).then((data) => {
-        console.log('data', data)
         if (data.length === 1) {
-            //req.session.user = data[0].username
-            console.log('req.session', req.session)
+            console.log(data)
             req.session.save(err => {
                 if (err) {
                     console.error(err);
