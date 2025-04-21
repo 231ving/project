@@ -2,7 +2,7 @@
 // Currently having issues with input boxes deselecting after every change in input
 import { useNavigate } from 'react-router-dom'
 
-export default function SearchSpellForm({ editMode, spellToEdit, onUpdate = f => f, onSubmit = f => f, onCancelEdit = f => f, onSearch = f => f, onResetFilter = f => f}) {
+export default function SearchSpellForm({ editMode, spellToEdit, currUser, onUpdate = f => f, onSubmit = f => f, onCancelEdit = f => f, onSearch = f => f, onResetFilter = f => f}) {
     const navigate = useNavigate()
     function error_log()  {
         if (spellToEdit.errors.length !== 0) {
@@ -13,6 +13,14 @@ export default function SearchSpellForm({ editMode, spellToEdit, onUpdate = f =>
                     ))}
                 </ul>
             </div>
+        }
+    }
+
+    function onAdd() {
+        if (currUser.username) {
+            navigate(`/spells/new`)
+        } else {
+            navigate(`/login`)
         }
     }
     
@@ -104,7 +112,7 @@ export default function SearchSpellForm({ editMode, spellToEdit, onUpdate = f =>
             />
             
             {/* <button> by default will submit a form.  If you don't want this behavior, set the type to 'button'*/}
-            <button className='col-sm-3 col-s-6 col-6' onClick={() => navigate(`/spells/new`)} type='button'>Add Spell</button>
+            <button className='col-sm-3 col-s-6 col-6' onClick={() => onAdd()} type='button'>Add Spell</button>
             <button className='col-sm-3 col-s-6 col-6' type='button' onClick={() => onSearch(spellToEdit)}>Search Using Filters</button>
             <button className='col-sm-3 col-s-6 col-6' type='button' onClick={() => onCancelEdit(spellToEdit)}>Clear Filter Boxes</button>
             <button className='col-sm-3 col-s-6 col-6' type='button' onClick={() => onResetFilter()}>Reset List</button>

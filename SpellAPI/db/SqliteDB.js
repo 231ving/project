@@ -273,7 +273,7 @@ class SqliteDB {
     }
 
     static userlogin(user) {
-        console.log(user)
+        console.log('find user to login', user)
         return new Promise((resolve, reject) => {
             this.db.all(`SELECT * from Users where username="${user.username}" AND password="${user.password}"`, (err, rows) => {
                 if (err) {

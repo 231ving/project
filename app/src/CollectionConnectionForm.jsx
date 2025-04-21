@@ -50,21 +50,19 @@ export default function CollectionConnectionForm({ spells, collections, currUser
 
     function remove_spell_list() {
         if (spellsInCollection) {
-            if (spellsInCollection.length !== spells.length) {
-                return <div>
-                    {spellsInCollection.filter(item => item.public_status === 1 || item.source_name === currUser.username || currUser.admin === 1).map((data, key) => <SpellSimple key={key} {...data} add={false} onSubmit={Submit} onDeleteConnection={Delete} /> )}
+            return <div>
+                {spellsInCollection.filter(item => item.public_status === 1 || item.source_name === currUser.username || currUser.admin === 1).map((data, key) => <SpellSimple key={key} {...data} add={false} onSubmit={Submit} onDeleteConnection={Delete} /> )}
                 </div>
-            } else {
-                return <section>No Spells In Collection</section>
-            }
+        } else {
+            return <section>No Spells In Collection</section>
         }
     }
 
     function add_spell_list() {
-        if (spellsNotInCollection.length !== spells.length) {
+        if (spellsInCollection) {
             return <div>
                 {spellsNotInCollection.filter(item => item.public_status === 1 || item.source_name === currUser.username || currUser.admin === 1).map((data, key) => <SpellSimple key={key} {...data} add={true} onSubmit={Submit} onDeleteConnection={Delete} /> )}
-            </div>
+                </div>
         } else {
             return <section>No Spells Available</section>
         }

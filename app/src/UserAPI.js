@@ -141,4 +141,27 @@ export default class UserAPI {
     })
   }
 
+  static logoutUser(user) {
+    const options = {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8'
+      },
+      body: JSON.stringify({user: user})
+    }
+    console.log('Attempting to get data to logout user')
+    console.log(user)
+
+    return fetch(`${apiURL}/logout`, options).then(async response => {
+      if (response.ok) {
+        console.log('Response was ok')
+        return response.json()
+      } else {
+        console.log('There was a error')
+        throw new Error(`Problem with GET:  ${(await response.json()).message}`)
+      }
+    })
+  }
+
 }

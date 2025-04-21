@@ -70,7 +70,7 @@ export default function LoginPage({  loginMode = false, loggedIn, currUser, user
                 return <section className="single_spell">
                 <div className='container'>
                 { loginMode ? 'Login' : "Sign Up" }
-                <form  onSubmit={loginMode ? onLogin : onSignUp} className="row spelldetails">
+                <form  onSubmit={(event) => submitForm(event)} className="row spelldetails">
                 <div className='col-lg-3 col-sm-6 col-s-6 col-6'>Username: </div>
                 <input
                     value={userToEdit.username}
@@ -114,7 +114,7 @@ export default function LoginPage({  loginMode = false, loggedIn, currUser, user
             return <section className="single_spell">
             <div className='container'>
                 { loginMode ? 'Login' : "Sign Up" }
-                <form  onSubmit={loginMode ? onLogin : onSignUp} className="row spelldetails">
+                <form  onSubmit={(event) => submitForm(event)} className="row spelldetails">
                 <div className='col-lg-3 col-sm-6 col-s-6 col-6'>Username: </div>
                 <input
                     value={userToEdit.username}
